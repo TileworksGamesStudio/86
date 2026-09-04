@@ -485,3 +485,10 @@ body::before {
     transition-duration: 0.01ms !important;
   }
 }
+
+   .brand-seal-img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  display: block;
+}
