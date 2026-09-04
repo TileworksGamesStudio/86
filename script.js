@@ -118,7 +118,7 @@ const CHEVRON_SVG = `
 const GAMES_CATALOGUE = [
   {
     id: "86-crossword",
-    title: "86 Crossword",
+    title: "Crossword",
     description: "Decode mixology terminology, classic formulas, and technical jargon.",
     icon: "crossword",
     url: "https://tileworksgamesstudio.github.io/86Crossword/",
@@ -129,7 +129,7 @@ const GAMES_CATALOGUE = [
   },
   {
     id: "86-specs",
-    title: "86 Specs",
+    title: "Specs",
     description: "Master classic cocktail builds, precise pours, and standard IBA ratios.",
     icon: "speedPour",
     url: "https://tileworksgamesstudio.github.io/86Specs/",
@@ -140,7 +140,7 @@ const GAMES_CATALOGUE = [
   },
   {
     id: "86-memory",
-    title: "86 Memory",
+    title: "Memory",
     description: "Test your mental recall pairing glassware, bottles, and essential bar tools.",
     icon: "flashcards",
     url: "https://tileworksgamesstudio.github.io/86Memory/",
@@ -151,7 +151,7 @@ const GAMES_CATALOGUE = [
   },
   {
     id: "86-connections",
-    title: "86 Connections",
+    title: "Connections",
     description: "Find common threads and group ingredients by botanical & flavor profiles.",
     icon: "connections",
     url: "https://tileworksgamesstudio.github.io/86Connections/",
@@ -162,7 +162,7 @@ const GAMES_CATALOGUE = [
   },
   {
     id: "86-hangman",
-    title: "86 Hangman",
+    title: "Hangman",
     description: "Guess classic cocktails, spirits, and bar terms before you get 86'd.",
     icon: "hangman",
     url: "https://tileworksgamesstudio.github.io/86Hangman/",
@@ -173,7 +173,7 @@ const GAMES_CATALOGUE = [
   },
   {
     id: "86-trivia",
-    title: "86 Trivia",
+    title: "Trivia",
     description: "Explore geography, denominations of origin, distillation styles, and bar lore.",
     icon: "spirits",
     url: "https://tileworksgamesstudio.github.io/86Trivia/",
