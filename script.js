@@ -2,7 +2,7 @@
  * BARTENDER GAMES HUB - CONTROLLER & REGISTRY
  * 
  * Central data-driven portal for launching bartender games.
- * Adding a game only requires inserting a new entry into `GAMES_CATALOGUE`.
+ * Connected to live 86-series web games.
  */
 
 'use strict';
@@ -26,7 +26,7 @@ const ICONS = {
     </svg>
   `,
 
-  // Cocktail shaker & speed pour dynamic symbol
+  // Cocktail shaker & speed pour dynamic symbol (Specs / Builds)
   speedPour: `
     <svg class="tile-icon-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <!-- Cobbler Shaker Body -->
@@ -42,18 +42,14 @@ const ICONS = {
     </svg>
   `,
 
-  // Coupette & glassware silhouettes
-  glassware: `
+  // Cards & matching pairs (Memory)
+  flashcards: `
     <svg class="tile-icon-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <!-- Coupe Bowl -->
-      <path d="M6 10C6 16.5 11 18 16 18C21 18 26 16.5 26 10H6Z" fill="#C45B28" fill-opacity="0.25" stroke="#D9A63A" stroke-width="1.8" stroke-linejoin="round"/>
-      <!-- Stem -->
-      <line x1="16" y1="18" x2="16" y2="27" stroke="#FAF2EB" stroke-width="1.8" stroke-linecap="round"/>
-      <!-- Base -->
-      <path d="M10 27H22" stroke="#D9A63A" stroke-width="2" stroke-linecap="round"/>
-      <!-- Liquid Line & Olive Garnish -->
-      <line x1="8" y1="12" x2="24" y2="12" stroke="#C45B28" stroke-width="1.5" stroke-linecap="round"/>
-      <circle cx="16" cy="9" r="2.5" fill="#96352A" stroke="#FAF2EB" stroke-width="1"/>
+      <rect x="9" y="5" width="16" height="20" rx="3" transform="rotate(8 9 5)" fill="#60402B" stroke="#D9A63A" stroke-width="1.6"/>
+      <rect x="6" y="7" width="16" height="20" rx="3" fill="#271A14" stroke="#C45B28" stroke-width="1.8"/>
+      <line x1="10" y1="12" x2="18" y2="12" stroke="#D9A63A" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="10" y1="16" x2="16" y2="16" stroke="#FAF2EB" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="10" y1="20" x2="14" y2="20" stroke="#FAF2EB" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
     </svg>
   `,
 
@@ -70,14 +66,20 @@ const ICONS = {
     </svg>
   `,
 
-  // Recipe cards & flash recall
-  flashcards: `
+  // Hangman classic gallows & citrus silhouette
+  hangman: `
     <svg class="tile-icon-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <rect x="9" y="5" width="16" height="20" rx="3" transform="rotate(8 9 5)" fill="#60402B" stroke="#D9A63A" stroke-width="1.6"/>
-      <rect x="6" y="7" width="16" height="20" rx="3" fill="#271A14" stroke="#C45B28" stroke-width="1.8"/>
-      <line x1="10" y1="12" x2="18" y2="12" stroke="#D9A63A" stroke-width="1.5" stroke-linecap="round"/>
-      <line x1="10" y1="16" x2="16" y2="16" stroke="#FAF2EB" stroke-width="1.5" stroke-linecap="round"/>
-      <line x1="10" y1="20" x2="14" y2="20" stroke="#FAF2EB" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+      <!-- Scaffold -->
+      <path d="M6 27H14M10 27V5H22V8" stroke="#D9A63A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M10 10L15 5" stroke="#D9A63A" stroke-width="1.5" stroke-linecap="round"/>
+      <!-- Noose / String -->
+      <line x1="22" y1="8" x2="22" y2="11" stroke="#FAF2EB" stroke-width="1.5" stroke-linecap="round"/>
+      <!-- Figure / Garnish silhouette -->
+      <circle cx="22" cy="13.5" r="2.5" fill="#C45B28" stroke="#FAF2EB" stroke-width="1.2"/>
+      <line x1="22" y1="16" x2="22" y2="21" stroke="#FAF2EB" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="19" y1="18" x2="25" y2="18" stroke="#FAF2EB" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="22" y1="21" x2="20" y2="25" stroke="#FAF2EB" stroke-width="1.4" stroke-linecap="round"/>
+      <line x1="22" y1="21" x2="24" y2="25" stroke="#FAF2EB" stroke-width="1.4" stroke-linecap="round"/>
     </svg>
   `,
 
@@ -94,7 +96,7 @@ const ICONS = {
     </svg>
   `,
 
-  // Fallback icon for future game entries lacking a custom SVG
+  // Fallback icon
   fallback: `
     <svg class="tile-icon-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <circle cx="16" cy="16" r="12" stroke="#D9A63A" stroke-width="1.8" stroke-dasharray="2 2"/>
@@ -111,72 +113,71 @@ const CHEVRON_SVG = `
 `;
 
 /* ==========================================================================
-   2. DATA-DRIVEN GAME CATALOGUE
-   Structured catalogue containing real game destinations and metadata.
+   2. DATA-DRIVEN GAME CATALOGUE (LIVE 86 SERIES)
    ========================================================================== */
 const GAMES_CATALOGUE = [
   {
-    id: "crossword",
-    title: "Bar Crossword",
+    id: "86-crossword",
+    title: "86 Crossword",
     description: "Decode mixology terminology, classic formulas, and technical jargon.",
     icon: "crossword",
-    url: "./crossword/",
+    url: "https://tileworksgamesstudio.github.io/86Crossword/",
     category: "Word",
     isNew: false,
     isVisible: true,
     order: 1
   },
   {
-    id: "recipe-rush",
-    title: "Recipe Rush",
-    description: "Call the specs under pressure: build cocktail orders against the clock.",
+    id: "86-specs",
+    title: "86 Specs",
+    description: "Master classic cocktail builds, precise pours, and standard IBA ratios.",
     icon: "speedPour",
-    url: "./recipe-rush/",
-    category: "Speed",
+    url: "https://tileworksgamesstudio.github.io/86Specs/",
+    category: "Specs",
     isNew: true,
     isVisible: true,
     order: 2
   },
   {
-    id: "glassware-match",
-    title: "Glassware Challenge",
-    description: "Pair classic drinks to their historic stems, vessels, and correct ice.",
-    icon: "glassware",
-    url: "./glassware/",
-    category: "Recognition",
+    id: "86-memory",
+    title: "86 Memory",
+    description: "Test your mental recall pairing glassware, bottles, and essential bar tools.",
+    icon: "flashcards",
+    url: "https://tileworksgamesstudio.github.io/86Memory/",
+    category: "Memory",
     isNew: false,
     isVisible: true,
     order: 3
   },
   {
-    id: "flavor-connections",
-    title: "Flavor Connections",
-    description: "Group ingredients, liqueurs, and spirits by botanical profiles.",
+    id: "86-connections",
+    title: "86 Connections",
+    description: "Find common threads and group ingredients by botanical & flavor profiles.",
     icon: "connections",
-    url: "./connections/",
-    category: "Matching",
+    url: "https://tileworksgamesstudio.github.io/86Connections/",
+    category: "Puzzle",
     isNew: true,
     isVisible: true,
     order: 4
   },
   {
-    id: "spirits-origin",
-    title: "Spirits of Origin",
-    description: "Explore geography, denominations of origin, and distillation styles.",
-    icon: "spirits",
-    url: "./spirits/",
-    category: "Trivia",
+    id: "86-hangman",
+    title: "86 Hangman",
+    description: "Guess classic cocktails, spirits, and bar terms before you get 86'd.",
+    icon: "hangman",
+    url: "https://tileworksgamesstudio.github.io/86Hangman/",
+    category: "Word",
     isNew: false,
     isVisible: true,
     order: 5
   },
   {
-    id: "speed-recall",
-    title: "Classic Flashcards",
-    description: "Master standard IBA ratios, modifiers, and classic garnish specs.",
-    icon: "flashcards",
-    url: "./flashcards/",
-    category: "Memory",
+    id: "86-trivia",
+    title: "86 Trivia",
+    description: "Explore geography, denominations of origin, distillation styles, and bar lore.",
+    icon: "spirits",
+    url: "https://tileworksgamesstudio.github.io/86Trivia/",
+    category: "Trivia",
     isNew: false,
     isVisible: true,
     order: 6
@@ -281,7 +282,7 @@ class GameHub {
     `;
 
     // Bind event handlers for tactile navigation & touch feedback
-    this.bindInteractions(anchor, game);
+    this.bindInteractions(anchor);
 
     return anchor;
   }
@@ -289,7 +290,7 @@ class GameHub {
   /**
    * Binds touch, press, and click navigation feedback
    */
-  bindInteractions(element, game) {
+  bindInteractions(element) {
     // Touch feedback
     element.addEventListener('touchstart', () => {
       element.classList.add('is-active');
@@ -305,22 +306,16 @@ class GameHub {
 
     // Click launch confirmation
     element.addEventListener('click', (e) => {
-      // Prevent instant navigation if custom transitions or mock routes exist
       if (element.getAttribute('href').startsWith('#')) {
         e.preventDefault();
-      }
-
-      element.classList.add('launching');
-
-      // Feedback delay ensures visual compression and state transition are perceived
-      if (!element.getAttribute('href').startsWith('#')) {
-        // If clicking a genuine link, allow default navigation to run naturally
+        element.classList.add('launching');
+        setTimeout(() => {
+          element.classList.remove('launching');
+        }, 350);
         return;
       }
 
-      setTimeout(() => {
-        element.classList.remove('launching');
-      }, 350);
+      element.classList.add('launching');
     });
   }
 
