@@ -131,6 +131,7 @@ body::before {
   width: 84px;
   height: 84px;
   border-radius: 50%;
+  overflow: hidden; 
   background: linear-gradient(145deg, #38251C 0%, #1A100B 100%);
   border: 2px solid rgba(217, 166, 58, 0.65);
   box-shadow: 
@@ -487,8 +488,9 @@ body::before {
 }
 
    .brand-seal-img {
-  width: 56px;
-  height: 56px;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Zooms to fill the circle */
   display: block;
+  transform: scale(1.3) translate(0px, 0px);
 }
