@@ -3,74 +3,89 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="description" content="Tileworks Cocktail Games — A curated collection of luxury daily puzzle games and cocktail challenges." />
-  <meta name="theme-color" content="#130703" />
+  <meta name="description" content="The Bartender Games — A curated luxury cocktail puzzle parlour by Tileworks." />
+  <meta name="theme-color" content="#120502" />
 
-  <title>Tileworks Cocktail Games</title>
+  <title>The Bartender Games | Tileworks</title>
 
-  <!-- Preload Logo for instant entrance choreography -->
+  <!-- Preload Logo for Instant Entrance Choreography -->
   <link rel="preload" href="logo.png" as="image" />
 
   <!-- Premium Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Ambient Atmospheric Layers -->
+  <!-- Atmospheric Cocktail Lounge Background Layers -->
   <div class="atmosphere" aria-hidden="true">
     <div class="atmosphere-base"></div>
+    <div class="atmosphere-radial"></div>
     <div class="atmosphere-grain"></div>
     <div class="atmosphere-light-source"></div>
     <div class="atmosphere-garnishes" id="garnish-layer"></div>
   </div>
 
-  <!-- Cinematic Intro Overlay -->
+  <!-- Cinematic Logo Intro Overlay -->
   <div class="intro-stage" id="intro-stage" aria-hidden="true">
     <div class="intro-logo-wrapper" id="intro-logo-wrapper">
-      <img src="logo.png" alt="Tileworks Cocktail Games" class="intro-logo" id="intro-logo" />
+      <img src="logo.png" alt="Tileworks Games" class="intro-logo" id="intro-logo" />
       <div class="intro-logo-fallback" id="intro-logo-fallback">
         <span class="fallback-wordmark">TILEWORKS</span>
-        <span class="fallback-sub">COCKTAIL GAMES</span>
+        <span class="fallback-sub">COCKTAIL SUITE</span>
       </div>
     </div>
   </div>
 
-  <!-- Main Game Hub Viewport -->
+  <!-- Main Viewport Interface -->
   <div class="viewport-wrapper" id="viewport-wrapper">
     <main class="hub-container" id="hub-container" role="main">
 
-      <!-- Header Brand Presence (Discreet, does not crowd screen) -->
+      <!-- Dynamic Lounge Title Header -->
       <header class="hub-header" id="hub-header">
-        <h1 class="visually-hidden">Tileworks Cocktail Games Hub</h1>
+        <div class="header-eyebrow">
+          <span class="eyebrow-line left"></span>
+          <span class="eyebrow-text">TILEWORKS PARLOUR</span>
+          <span class="eyebrow-line right"></span>
+        </div>
+
+        <h1 class="hub-title" aria-label="The Bartender Games">
+          <span class="title-part-small">THE</span>
+          <span class="title-part-hero">BARTENDER</span>
+          <span class="title-part-sub">GAMES</span>
+        </h1>
+
+        <div class="header-tagline">
+          <span class="tagline-dot">◆</span>
+          <span class="tagline-text">Daily Challenges &amp; Cellar Specs</span>
+          <span class="tagline-dot">◆</span>
+        </div>
       </header>
 
-      <!-- 3x3 Fixed Game Grid Container -->
+      <!-- 3×3 Glass Matrix Grid -->
       <div class="grid-perspective-box">
-        <div class="game-grid" id="game-grid" role="list" aria-label="Cocktail Games Collection">
-          <!-- 9 Fixed Position Slots dynamically populated by script.js -->
+        <div class="game-grid" id="game-grid" role="list" aria-label="Bartender Games Collection">
+          <!-- Populated dynamically via script.js -->
         </div>
       </div>
 
-      <!-- Centered Instagram Access -->
+      <!-- Subtle Centered Gold Social Anchor -->
       <nav class="social-shelf" id="social-shelf" aria-label="Social Links">
         <a 
-          href="https://instagram.com" 
+          href="https://instagram.com/tileworks_studio" 
           id="instagram-link" 
           class="instagram-btn" 
           target="_blank" 
           rel="noopener noreferrer" 
           aria-label="Visit Tileworks Games on Instagram"
         >
-          <!-- Fine Gold Instagram SVG Line Art -->
           <svg class="instagram-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
             <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
             <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
           </svg>
-          <span class="instagram-ripple"></span>
         </a>
       </nav>
 

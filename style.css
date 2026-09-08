@@ -1,51 +1,57 @@
 /* ==========================================================================
-   TILEWORKS COCKTAIL GAMES — DESIGN SYSTEM TOKENS
+   TILEWORKS: THE BARTENDER GAMES — DESIGN SYSTEM TOKENS
    ========================================================================== */
 :root {
-  /* Burnt Orange Lounge Atmosphere Palette */
-  --bg-deep: #0e0503;
+  /* Burnt Orange & Deep Speakeasy Palette */
+  --bg-deep: #0d0402;
   --bg-rich-dark: #190904;
-  --orange-brown: #2d1107;
-  --burnt-orange-dark: #451b0b;
+  --orange-brown: #2e1207;
+  --burnt-orange-dark: #471b0b;
   --burnt-orange-mid: #782e11;
   --burnt-orange-vibrant: #bd4a18;
-  --burnt-orange-light: #e06328;
-  --burnt-orange-glass: rgba(62, 23, 8, 0.58);
-  --burnt-orange-glass-hover: rgba(94, 35, 12, 0.72);
-  --burnt-orange-pressed: rgba(43, 15, 5, 0.9);
+  --burnt-orange-light: #ea6529;
 
-  /* Delicate Metallic Gold Trim & Ornamentation */
-  --gold-sheen-0: #fff5d6;
-  --gold-sheen-1: #fae29f;
-  --gold-sheen-2: #d8aa4e;
-  --gold-sheen-3: #a4782b;
-  --gold-sheen-4: #6a4c16;
+  /* Glass Surface Shaders */
+  --glass-tint: rgba(68, 25, 9, 0.48);
+  --glass-tint-hover: rgba(98, 36, 12, 0.62);
+  --glass-tint-pressed: rgba(43, 15, 5, 0.88);
+  --glass-specular-top: rgba(255, 245, 214, 0.46);
+  --glass-specular-sheen: rgba(255, 255, 255, 0.16);
+
+  /* Metallic Gold Palette */
+  --gold-sheen-0: #fff6da;
+  --gold-sheen-1: #fce6a8;
+  --gold-sheen-2: #dfb256;
+  --gold-sheen-3: #a67a2c;
+  --gold-sheen-4: #6b4e18;
   --gold-line: rgba(240, 196, 102, 0.38);
-  --gold-line-bright: rgba(253, 230, 168, 0.85);
-  --gold-glow: rgba(224, 165, 64, 0.28);
+  --gold-line-bright: rgba(255, 235, 179, 0.88);
+  --gold-glow: rgba(224, 165, 64, 0.35);
 
   /* Typography Colors */
   --text-main: #fcf4eb;
-  --text-warm: #ebd5c0;
-  --text-muted: #af8972;
+  --text-warm: #ebd6c2;
+  --text-muted: #b58d75;
 
-  /* Glass Surface Tokens */
-  --glass-blur: 14px;
+  /* Glass Token Physics */
+  --glass-blur: 18px;
   --glass-border-radius: clamp(14px, 2.8vw, 20px);
-  --panel-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.75), 
-                  0 3px 10px -2px rgba(189, 74, 24, 0.15);
-  --panel-shadow-hover: 0 16px 36px -6px rgba(0, 0, 0, 0.85),
-                        0 0 18px 2px rgba(230, 170, 78, 0.3);
+  --panel-shadow: 
+    0 14px 34px -6px rgba(0, 0, 0, 0.82), 
+    0 4px 12px -2px rgba(189, 74, 24, 0.18);
+  --panel-shadow-hover: 
+    0 20px 42px -6px rgba(0, 0, 0, 0.9), 
+    0 0 22px 2px rgba(230, 170, 78, 0.38);
 
-  /* Typography Fonts */
+  /* Fonts */
   --font-serif: "Cinzel", Georgia, serif;
   --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   /* Animation Timings */
   --anim-logo-settle: 650ms cubic-bezier(0.25, 1.25, 0.5, 1);
   --anim-logo-exit: 680ms cubic-bezier(0.7, 0, 0.84, 0);
-  --anim-panel-enter: 750ms cubic-bezier(0.16, 1, 0.3, 1);
-  --anim-fall-through: 540ms cubic-bezier(0.4, 0, 0.2, 1);
+  --anim-panel-enter: 650ms cubic-bezier(0.16, 1, 0.3, 1);
+  --anim-fall-through: 270ms cubic-bezier(0.22, 1, 0.36, 1); /* Faster, responsive plunge */
 }
 
 /* ==========================================================================
@@ -69,19 +75,6 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Visually Hidden Utility for Accessible Headings */
-.visually-hidden {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-}
-
 /* ==========================================================================
    ATMOSPHERIC BACKGROUND & COCKTAIL LOUNGE LIGHTING
    ========================================================================== */
@@ -96,13 +89,19 @@ html, body {
 .atmosphere-base {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 30%, #290f05 0%, #160803 55%, #0b0301 100%);
+  background: #0d0402;
+}
+
+.atmosphere-radial {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 28%, #280e04 0%, #170702 50%, #090201 100%);
 }
 
 .atmosphere-grain {
   position: absolute;
   inset: 0;
-  opacity: 0.035;
+  opacity: 0.038;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
@@ -111,20 +110,20 @@ html, body {
   bottom: -15vh;
   left: 50%;
   transform: translateX(-50%);
-  width: clamp(340px, 90vw, 780px);
-  height: clamp(300px, 50vh, 550px);
-  background: radial-gradient(ellipse at center, rgba(224, 99, 40, 0.28) 0%, rgba(189, 74, 24, 0.14) 40%, rgba(14, 5, 3, 0) 75%);
-  filter: blur(45px);
+  width: clamp(340px, 92vw, 840px);
+  height: clamp(300px, 52vh, 580px);
+  background: radial-gradient(ellipse at center, rgba(234, 101, 41, 0.32) 0%, rgba(189, 74, 24, 0.16) 42%, rgba(13, 4, 2, 0) 75%);
+  filter: blur(50px);
   animation: ambientLightBreathe 9s ease-in-out infinite alternate;
 }
 
 @keyframes ambientLightBreathe {
   0% {
     transform: translateX(-50%) scale(1);
-    opacity: 0.75;
+    opacity: 0.8;
   }
   100% {
-    transform: translateX(-50%) scale(1.12);
+    transform: translateX(-50%) scale(1.14);
     opacity: 1;
   }
 }
@@ -135,7 +134,6 @@ html, body {
   overflow: hidden;
 }
 
-/* Floating Fine Gold Line Art Garnishes */
 .garnish-item {
   position: absolute;
   width: var(--size, 38px);
@@ -150,18 +148,17 @@ html, body {
   height: 100%;
   display: block;
   stroke: var(--gold-sheen-1);
-  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.65));
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.7));
   transition: stroke 1.2s ease, filter 1.2s ease;
 }
 
-/* Light reaction as garnish crosses the bottom bar glow */
 .garnish-item.in-glow svg {
   stroke: var(--gold-sheen-0);
-  filter: drop-shadow(0 0 10px rgba(250, 226, 159, 0.55));
+  filter: drop-shadow(0 0 10px rgba(252, 230, 168, 0.6));
 }
 
 /* ==========================================================================
-   LOGO INTRO OVERLAY & MOTION CHOREOGRAPHY
+   LOGO INTRO OVERLAY
    ========================================================================== */
 .intro-stage {
   position: fixed;
@@ -191,10 +188,9 @@ html, body {
   width: 100%;
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 25px rgba(224, 99, 40, 0.35));
+  filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 28px rgba(234, 101, 41, 0.38));
 }
 
-/* Fallback wordmark if logo.png fails or while loading */
 .intro-logo-fallback {
   display: none;
   flex-direction: column;
@@ -202,7 +198,7 @@ html, body {
   text-align: center;
   border: 1px solid var(--gold-line-bright);
   padding: 16px 24px;
-  background: var(--burnt-orange-glass);
+  background: var(--glass-tint);
   border-radius: 12px;
 }
 
@@ -221,7 +217,6 @@ html, body {
   margin-top: 6px;
 }
 
-/* Logo Animation Classes */
 .intro-stage.enter .intro-logo-wrapper {
   animation: logoSettleBounce var(--anim-logo-settle) forwards;
 }
@@ -254,7 +249,7 @@ html, body {
     transform: translate3d(0, 0, 0) scale(1);
     filter: blur(0px);
   }
-  40% {
+  38% {
     opacity: 0.95;
     transform: translate3d(0, -6px, 160px) scale(1.4);
   }
@@ -278,7 +273,7 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: env(safe-area-inset-top, 16px) env(safe-area-inset-right, 16px) env(safe-area-inset-bottom, 18px) env(safe-area-inset-left, 16px);
+  padding: env(safe-area-inset-top, 16px) env(safe-area-inset-right, 16px) env(safe-area-inset-bottom, 16px) env(safe-area-inset-left, 16px);
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -291,14 +286,127 @@ html, body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 10px 6px;
-  gap: clamp(14px, 2.5vh, 24px);
+  padding: 10px 4px;
+  gap: clamp(14px, 2.8vh, 22px);
 }
 
+/* ==========================================================================
+   DYNAMIC HEADER: "THE BARTENDER GAMES"
+   ========================================================================== */
 .hub-header {
   width: 100%;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Eyebrow Accent Line */
+.header-eyebrow {
+  display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 290px;
+  margin-bottom: 5px;
+}
+
+.eyebrow-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold-line) 100%);
+}
+
+.eyebrow-line.right {
+  background: linear-gradient(90deg, var(--gold-line) 0%, transparent 100%);
+}
+
+.eyebrow-text {
+  font-family: var(--font-sans);
+  font-size: clamp(0.58rem, 1.8vw, 0.68rem);
+  letter-spacing: 0.34em;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* Dynamic Hero Shimmer Title */
+.hub-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: clamp(6px, 1.5vw, 10px);
+  font-family: var(--font-serif);
+  line-height: 1.05;
+  margin: 2px 0 6px 0;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.7);
+}
+
+.title-part-small {
+  font-size: clamp(0.85rem, 2.8vw, 1.15rem);
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  color: var(--gold-sheen-2);
+}
+
+.title-part-hero {
+  font-size: clamp(1.48rem, 5.8vw, 2.15rem);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  background: linear-gradient(
+    90deg,
+    #dfb256 0%,
+    #fff6da 25%,
+    #dfb256 50%,
+    #fce6a8 75%,
+    #dfb256 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: goldShimmer 7s linear infinite;
+  filter: drop-shadow(0 0 16px rgba(223, 178, 86, 0.3));
+}
+
+.title-part-sub {
+  font-size: clamp(0.92rem, 3vw, 1.25rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--text-warm);
+}
+
+@keyframes goldShimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* Subtle Lounge Tagline */
+.header-tagline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text-muted);
+}
+
+.tagline-dot {
+  font-size: 0.5rem;
+  color: var(--gold-sheen-3);
+  transform: scale(0.9);
+}
+
+.tagline-text {
+  font-family: var(--font-sans);
+  font-size: clamp(0.68rem, 2.1vw, 0.78rem);
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  color: var(--text-warm);
+  opacity: 0.88;
 }
 
 /* ==========================================================================
@@ -314,12 +422,12 @@ html, body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  gap: clamp(10px, 2.2vw, 15px);
+  gap: clamp(10px, 2.3vw, 15px);
   width: 100%;
   margin: 0 auto;
 }
 
-/* Fixed Grid Slot (Ensures strictly 9 positions, deliberate negative space) */
+/* Fixed Grid Slot */
 .grid-cell {
   position: relative;
   width: 100%;
@@ -330,8 +438,15 @@ html, body {
   justify-content: stretch;
 }
 
+/* Intentional negative space recess when a slot is disabled */
+.grid-cell.is-empty {
+  border-radius: var(--glass-border-radius);
+  border: 1px dashed rgba(223, 178, 86, 0.12);
+  background: radial-gradient(circle at center, rgba(30, 11, 4, 0.22) 0%, transparent 80%);
+}
+
 /* ==========================================================================
-   INTERACTIVE GLASS PANELS (NEO-BRUTALIST LUXURY)
+   AUTHENTIC FROSTED GLASS PANELS (NEO-BRUTALIST LUXURY)
    ========================================================================== */
 .tile-link {
   position: relative;
@@ -344,66 +459,98 @@ html, body {
   padding: clamp(8px, 1.8vw, 14px);
   text-decoration: none;
   border-radius: var(--glass-border-radius);
-  background-color: var(--burnt-orange-glass);
-  box-shadow: var(--panel-shadow);
   cursor: pointer;
   outline: none;
   user-select: none;
   -webkit-user-select: none;
   transform-style: preserve-3d;
   will-change: transform, opacity, box-shadow;
-  transition: transform 260ms var(--anim-logo-settle), 
-              background-color 260ms ease,
-              box-shadow 260ms ease;
+  transition: transform 220ms cubic-bezier(0.2, 0.9, 0.4, 1), 
+              background 220ms ease,
+              box-shadow 220ms ease;
   overflow: hidden;
 
-  /* Glassmorphism enhancement with fallback */
-  background: linear-gradient(145deg, rgba(72, 27, 9, 0.68) 0%, rgba(42, 16, 5, 0.72) 100%);
+  /* Highly Refractive Cocktail Glass Surface */
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(84, 31, 10, 0.52) 28%,
+    rgba(32, 11, 4, 0.72) 100%
+  );
   border: 1px solid var(--gold-line);
+
+  /* Multi-level Beveled Glass Refraction & Deep Drop Shadow */
+  box-shadow: 
+    inset 0 1.5px 1px 0 var(--glass-specular-top),
+    inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.65),
+    var(--panel-shadow);
 }
 
-/* Modern backdrop-filter where supported */
+/* Enhanced Glass Frosted Backing where supported */
 @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
   .tile-link {
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    background: linear-gradient(145deg, rgba(72, 27, 9, 0.52) 0%, rgba(38, 14, 4, 0.65) 100%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(155%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(155%);
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.13) 0%,
+      rgba(84, 31, 10, 0.42) 28%,
+      rgba(26, 9, 3, 0.65) 100%
+    );
   }
 }
 
-/* Internal Glass Light Refraction Accent */
+/* Glass Surface Diagonal Glint Sheen */
 .tile-link::before {
   content: "";
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(circle at 50% 0%, rgba(255, 235, 190, 0.16) 0%, rgba(255, 255, 255, 0) 70%);
+  top: -60%;
+  left: -60%;
+  width: 220%;
+  height: 220%;
+  background: linear-gradient(
+    45deg,
+    transparent 42%,
+    rgba(255, 255, 255, 0.09) 48%,
+    rgba(255, 245, 214, 0.18) 50%,
+    rgba(255, 255, 255, 0.09) 52%,
+    transparent 58%
+  );
   pointer-events: none;
+  transform: rotate(0deg);
+  transition: transform 600ms ease;
 }
 
-/* Delicately Shimmering Fine Gold Trim (Perimeter pseudo) */
+/* Delicately Shimmering Metallic Trim */
 .tile-link::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
   border: 1px solid transparent;
-  background: linear-gradient(135deg, var(--gold-sheen-1) 0%, rgba(216, 170, 78, 0.25) 45%, var(--gold-sheen-3) 100%) border-box;
+  background: linear-gradient(135deg, var(--gold-sheen-1) 0%, rgba(223, 178, 86, 0.22) 48%, var(--gold-sheen-3) 100%) border-box;
   -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
   mask-composite: exclude;
   pointer-events: none;
-  opacity: 0.65;
-  transition: opacity 280ms ease;
+  opacity: 0.7;
+  transition: opacity 240ms ease;
 }
 
-/* Hover & Keyboard Focus States */
+/* Hover & Keyboard States */
 @media (hover: hover) and (pointer: fine) {
   .tile-link:hover {
     transform: translateY(-4px) scale(1.02);
-    box-shadow: var(--panel-shadow-hover);
+    box-shadow: 
+      inset 0 2px 2px 0 rgba(255, 255, 255, 0.6),
+      inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.7),
+      var(--panel-shadow-hover);
     border-color: var(--gold-line-bright);
+  }
+
+  .tile-link:hover::before {
+    transform: translate(14%, 14%);
   }
 
   .tile-link:hover::after {
@@ -412,8 +559,8 @@ html, body {
 
   .tile-link:hover .tile-icon svg {
     stroke: var(--gold-sheen-0);
-    filter: drop-shadow(0 0 8px rgba(250, 226, 159, 0.45));
-    transform: scale(1.07);
+    filter: drop-shadow(0 0 10px rgba(252, 230, 168, 0.55));
+    transform: scale(1.08);
   }
 
   .tile-link:hover .tile-name {
@@ -424,18 +571,18 @@ html, body {
 .tile-link:focus-visible {
   outline: 2px solid var(--gold-sheen-1);
   outline-offset: 3px;
-  box-shadow: 0 0 0 5px rgba(224, 99, 40, 0.4);
+  box-shadow: 0 0 0 5px rgba(234, 101, 41, 0.45);
 }
 
-/* Tactile Press Reaction */
+/* Immediate Tactile Press Reaction */
 .tile-link.is-pressed {
   transform: translateY(2px) scale(0.96) !important;
-  background-color: var(--burnt-orange-pressed);
-  transition-duration: 70ms;
+  background-color: var(--glass-tint-pressed) !important;
+  transition-duration: 60ms;
 }
 
 /* ==========================================================================
-   TILE CONTENT: ICON & LABEL
+   TILE CONTENT: ICON & TYPOGRAPHY
    ========================================================================== */
 .tile-icon {
   position: relative;
@@ -457,8 +604,8 @@ html, body {
   stroke-width: 1.55;
   stroke-linecap: round;
   stroke-linejoin: round;
-  transition: stroke 240ms ease, transform 240ms ease, filter 240ms ease;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+  transition: stroke 200ms ease, transform 200ms ease, filter 200ms ease;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.65));
 }
 
 .tile-name {
@@ -471,22 +618,22 @@ html, body {
   line-height: 1.15;
   max-width: 100%;
   word-break: break-word;
-  transition: color 240ms ease;
+  transition: color 200ms ease;
 }
 
-/* Special Subtle Highlight on Ninth Slot (Donate) */
+/* Donate Special Tone */
 .tile-link[data-id="donate"] {
-  background: linear-gradient(145deg, rgba(82, 32, 12, 0.55) 0%, rgba(46, 17, 6, 0.7) 100%);
-}
-.tile-link[data-id="donate"] .tile-icon svg {
-  stroke: var(--gold-sheen-1);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(102, 38, 12, 0.52) 28%,
+    rgba(38, 14, 5, 0.75) 100%
+  );
 }
 
 /* ==========================================================================
-   ENTRANCE & 3D SIGNATURE TRANSITIONS
+   ENTRANCE & ULTRA-FAST 3D FALL-THROUGH
    ========================================================================== */
-
-/* Emerging from screen depth */
 .grid-cell.emerging .tile-link {
   animation: panelRiseUp var(--anim-panel-enter) cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
@@ -497,9 +644,9 @@ html, body {
     transform: translate3d(0, 36px, -110px) rotateX(-16deg) scale(0.85);
     filter: blur(5px);
   }
-  60% {
+  65% {
     opacity: 0.95;
-    transform: translate3d(0, -4px, 10px) rotateX(2deg) scale(1.02);
+    transform: translate3d(0, -3px, 8px) rotateX(2deg) scale(1.02);
     filter: blur(0px);
   }
   100% {
@@ -509,48 +656,48 @@ html, body {
   }
 }
 
-/* Signature Interaction: Clicked Glass Panel Falls Through The Screen */
+/* Signature Interaction: Rapid Fall Through Screen Without Lag */
 .tile-link.is-falling {
   z-index: 50;
   pointer-events: none;
-  animation: fallThroughScreen var(--anim-fall-through) forwards;
+  animation: fastFallThrough var(--anim-fall-through) forwards;
 }
 
-@keyframes fallThroughScreen {
+@keyframes fastFallThrough {
   0% {
     opacity: 1;
-    transform: translate3d(0, 2px, 0) scale(0.96) rotateX(0deg);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+    transform: translate3d(0, 1px, 0) scale(0.96) rotateX(0deg);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.8);
   }
-  25% {
+  20% {
     opacity: 1;
-    transform: translate3d(0, -4px, 40px) scale(1.05) rotateX(4deg);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.9), 0 0 24px var(--gold-glow);
+    transform: translate3d(0, -3px, 35px) scale(1.04) rotateX(3deg);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.9), 0 0 20px var(--gold-glow);
   }
   100% {
     opacity: 0;
-    transform: translate3d(0, 160px, -240px) scale(0.72) rotateX(32deg);
-    filter: blur(6px);
+    transform: translate3d(0, 150px, -220px) scale(0.68) rotateX(28deg);
+    filter: blur(5px);
   }
 }
 
-/* Surrounding Panels Subtle Dim Feedback */
+/* Surrounding Grid Dimming Feedback */
 .game-grid.locked .tile-link:not(.is-falling) {
-  opacity: 0.38;
+  opacity: 0.32;
   transform: scale(0.965);
-  transition: opacity 350ms ease, transform 350ms ease;
+  transition: opacity 220ms ease, transform 220ms ease;
   pointer-events: none;
 }
 
 /* ==========================================================================
-   INSTAGRAM SOCIAL ACCESS (CENTRED, SUBTLE, GOLD)
+   INSTAGRAM SOCIAL ACCESS
    ========================================================================== */
 .social-shelf {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding-top: 4px;
+  padding-top: 2px;
 }
 
 .instagram-btn {
@@ -564,7 +711,7 @@ html, body {
   color: var(--gold-sheen-2);
   text-decoration: none;
   outline: none;
-  transition: color 240ms ease, transform 240ms ease;
+  transition: color 200ms ease, transform 200ms ease;
 }
 
 .instagram-icon {
@@ -572,14 +719,14 @@ html, body {
   height: 19px;
   display: block;
   stroke: var(--gold-sheen-2);
-  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.6));
-  transition: stroke 240ms ease, transform 240ms ease, filter 240ms ease;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.65));
+  transition: stroke 200ms ease, transform 200ms ease, filter 200ms ease;
 }
 
 .instagram-btn:hover .instagram-icon {
   stroke: var(--gold-sheen-0);
   transform: scale(1.15);
-  filter: drop-shadow(0 0 8px rgba(250, 226, 159, 0.6));
+  filter: drop-shadow(0 0 8px rgba(252, 230, 168, 0.65));
 }
 
 .instagram-btn:focus-visible {
@@ -588,14 +735,20 @@ html, body {
 }
 
 /* ==========================================================================
-   RESPONSIVE AUDIT: SMALL SCREENS, SHORT PHONES, TABLETS & DESKTOPS
+   RESPONSIVE AUDIT & BREAKPOINTS
    ========================================================================== */
-
-/* Very Small Mobile Phones (320px - 360px) */
 @media (max-width: 360px) {
   .hub-container {
-    padding: 6px 2px;
+    padding: 4px 2px;
     gap: 12px;
+  }
+
+  .header-eyebrow {
+    margin-bottom: 2px;
+  }
+
+  .hub-title {
+    margin-bottom: 2px;
   }
 
   .game-grid {
@@ -607,8 +760,7 @@ html, body {
   }
 
   .tile-name {
-    font-size: 0.68rem;
-    letter-spacing: 0.02em;
+    font-size: 0.67rem;
   }
 
   .tile-icon {
@@ -616,11 +768,14 @@ html, body {
   }
 }
 
-/* Short Mobile Viewports & Mobile Landscape */
 @media (max-height: 640px) and (orientation: portrait) {
   .hub-container {
     gap: 10px;
-    padding: 4px 2px;
+    padding: 2px;
+  }
+
+  .hub-title {
+    margin: 1px 0 2px 0;
   }
 
   .tile-icon {
@@ -630,14 +785,14 @@ html, body {
   }
 
   .tile-name {
-    font-size: 0.69rem;
+    font-size: 0.68rem;
   }
 }
 
 @media (max-height: 520px) and (orientation: landscape) {
   .viewport-wrapper {
     justify-content: flex-start;
-    padding: 16px;
+    padding: 14px;
   }
 
   .hub-container {
@@ -649,10 +804,10 @@ html, body {
   }
 }
 
-/* Tablets and Desktops */
 @media (min-width: 768px) {
   .hub-container {
     max-width: 520px;
+    gap: 24px;
   }
 
   .game-grid {
@@ -665,7 +820,7 @@ html, body {
 }
 
 /* ==========================================================================
-   ACCESSIBILITY & REDUCED MOTION SUPPORT
+   ACCESSIBILITY & REDUCED MOTION
    ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -674,16 +829,16 @@ html, body {
     transition-duration: 0.01ms !important;
   }
 
-  .intro-stage {
-    display: none !important;
-  }
-
+  .intro-stage,
+  .garnish-item,
   .atmosphere-light-source {
+    display: none !important;
     animation: none !important;
   }
 
-  .garnish-item {
-    display: none !important;
+  .title-part-hero {
+    animation: none !important;
+    background-position: 0% 50% !important;
   }
 
   .tile-link.is-falling {
