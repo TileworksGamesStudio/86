@@ -1,359 +1,641 @@
 /**
- * BARTENDER GAMES HUB - CONTROLLER & REGISTRY
- * 
- * Central data-driven portal for launching bartender games.
- * Connected to live 86-series web games.
+ * ==========================================================================
+ * TILEWORKS COCKTAIL GAMES — GAME HUB ARCHITECTURE
+ * ==========================================================================
+ * Self-contained, zero-dependency, mobile-first controller for:
+ * 1. Centralized 9-tile configuration (independent enable/disable & URL control)
+ * 2. High-aesthetic cocktail garnish particle system (~7-10 active)
+ * 3. Cinematic logo intro sequence with guaranteed 0.8s hold and forward exit
+ * 4. Refined Neo-Brutalist 3D fall-through tile interaction & navigation lock
+ * 5. Full keyboard, screen-reader, and reduced-motion compliance
+ * ==========================================================================
  */
 
-'use strict';
+(function () {
+  "use strict";
 
-/* ==========================================================================
-   1. SHARED MODERN SVG ICON REGISTRY
-   Visually coherent iconography sharing stroke weight, palettes, and mood.
-   ========================================================================== */
-const ICONS = {
-  // Crossword puzzle grid symbol
-  crossword: `
-    <svg class="tile-icon-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <rect x="4" y="4" width="24" height="24" rx="4" stroke="#D9A63A" stroke-width="1.8"/>
-      <line x1="12" y1="4" x2="12" y2="28" stroke="#D9A63A" stroke-width="1.4" opacity="0.6"/>
-      <line x1="20" y1="4" x2="20" y2="28" stroke="#D9A63A" stroke-width="1.4" opacity="0.6"/>
-      <line x1="4" y1="12" x2="28" y2="12" stroke="#D9A63A" stroke-width="1.4" opacity="0.6"/>
-      <line x1="4" y1="20" x2="28" y2="20" stroke="#D9A63A" stroke-width="1.4" opacity="0.6"/>
-      <rect x="4" y="4" width="8" height="8" fill="#C45B28" opacity="0.85"/>
-      <rect x="20" y="12" width="8" height="8" fill="#C45B28" opacity="0.85"/>
-      <rect x="12" y="20" width="8" height="8" fill="#96352A" opacity="0.9"/>
-    </svg>
-  `,
-
-  // Cocktail shaker & speed pour dynamic symbol (Specs / Builds)
-  speedPour: `
-    <svg class="tile-icon-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <!-- Cobbler Shaker Body -->
-      <path d="M11 15L13 27C13 28.1 13.9 29 15 29H17C18.1 29 19 28.1 19 27L21 15H11Z" fill="#C45B28" fill-opacity="0.2" stroke="#D9A63A" stroke-width="1.8" stroke-linejoin="round"/>
-      <!-- Shaker Shoulder -->
-      <path d="M9 15C9 13 11 11 16 11C21 11 23 13 23 15H9Z" stroke="#D9A63A" stroke-width="1.8" fill="#60402B"/>
-      <!-- Shaker Cap -->
-      <rect x="13" y="6" width="6" height="5" rx="1.5" fill="#D9A63A" stroke="#D9A63A" stroke-width="1.5"/>
-      <!-- Speed Motion Streaks -->
-      <path d="M5 8L8 10" stroke="#FAF2EB" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
-      <path d="M24 7L27 9" stroke="#FAF2EB" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
-      <path d="M25 24L28 22" stroke="#FAF2EB" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-    </svg>
-  `,
-
-  // Cards & matching pairs (Memory)
-  flashcards: `
-    <svg class="tile-icon-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <rect x="9" y="5" width="16" height="20" rx="3" transform="rotate(8 9 5)" fill="#60402B" stroke="#D9A63A" stroke-width="1.6"/>
-      <rect x="6" y="7" width="16" height="20" rx="3" fill="#271A14" stroke="#C45B28" stroke-width="1.8"/>
-      <line x1="10" y1="12" x2="18" y2="12" stroke="#D9A63A" stroke-width="1.5" stroke-linecap="round"/>
-      <line x1="10" y1="16" x2="16" y2="16" stroke="#FAF2EB" stroke-width="1.5" stroke-linecap="round"/>
-      <line x1="10" y1="20" x2="14" y2="20" stroke="#FAF2EB" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-    </svg>
-  `,
-
-  // Connections / flavor molecular network
-  connections: `
-    <svg class="tile-icon-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle cx="16" cy="7" r="3.5" fill="#D9A63A"/>
-      <circle cx="7" cy="22" r="3.5" fill="#C45B28"/>
-      <circle cx="25" cy="22" r="3.5" fill="#96352A"/>
-      <circle cx="16" cy="19" r="2.5" fill="#FAF2EB"/>
-      <line x1="16" y1="10.5" x2="16" y2="16.5" stroke="#FAF2EB" stroke-width="1.6" stroke-dasharray="2 2"/>
-      <line x1="9.5" y1="20" x2="13.5" y2="19" stroke="#FAF2EB" stroke-width="1.6"/>
-      <line x1="22.5" y1="20" x2="18.5" y2="19" stroke="#FAF2EB" stroke-width="1.6"/>
-    </svg>
-  `,
-
-  // Hangman classic gallows & citrus silhouette
-  hangman: `
-    <svg class="tile-icon-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <!-- Scaffold -->
-      <path d="M6 27H14M10 27V5H22V8" stroke="#D9A63A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M10 10L15 5" stroke="#D9A63A" stroke-width="1.5" stroke-linecap="round"/>
-      <!-- Noose / String -->
-      <line x1="22" y1="8" x2="22" y2="11" stroke="#FAF2EB" stroke-width="1.5" stroke-linecap="round"/>
-      <!-- Figure / Garnish silhouette -->
-      <circle cx="22" cy="13.5" r="2.5" fill="#C45B28" stroke="#FAF2EB" stroke-width="1.2"/>
-      <line x1="22" y1="16" x2="22" y2="21" stroke="#FAF2EB" stroke-width="1.4" stroke-linecap="round"/>
-      <line x1="19" y1="18" x2="25" y2="18" stroke="#FAF2EB" stroke-width="1.4" stroke-linecap="round"/>
-      <line x1="22" y1="21" x2="20" y2="25" stroke="#FAF2EB" stroke-width="1.4" stroke-linecap="round"/>
-      <line x1="22" y1="21" x2="24" y2="25" stroke="#FAF2EB" stroke-width="1.4" stroke-linecap="round"/>
-    </svg>
-  `,
-
-  // Spirits globe & distillation trivia
-  spirits: `
-    <svg class="tile-icon-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <!-- Distillation Alembic Still outline -->
-      <path d="M8 25C8 20 12 18 14 15V9C14 7.5 15.5 6 17 6H19C20.5 6 22 7.5 22 9C22 12 26 13 26 17" stroke="#D9A63A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      <!-- Still Base Kettle -->
-      <path d="M6 25C6 22 9 20 15 20C21 20 24 22 24 25C24 27 21 28 15 28C9 28 6 27 6 25Z" fill="#C45B28" fill-opacity="0.3" stroke="#FAF2EB" stroke-width="1.5"/>
-      <circle cx="26" cy="18" r="1.5" fill="#D9A63A"/>
-      <!-- Warm Flame -->
-      <path d="M13 29C13 29 15 27 15 29C15 29 17 27 17 29" stroke="#96352A" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-  `,
-
-  // Fallback icon
-  fallback: `
-    <svg class="tile-icon-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle cx="16" cy="16" r="12" stroke="#D9A63A" stroke-width="1.8" stroke-dasharray="2 2"/>
-      <path d="M12 16L15 19L20 13" stroke="#C45B28" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  `
-};
-
-/* Chevron SVG used uniformly across cards */
-const CHEVRON_SVG = `
-  <svg class="tile-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <polyline points="9 18 15 12 9 6"></polyline>
-  </svg>
-`;
-
-/* ==========================================================================
-   2. DATA-DRIVEN GAME CATALOGUE (LIVE 86 SERIES)
-   ========================================================================== */
-const GAMES_CATALOGUE = [
-  {
-    id: "86-crossword",
-    title: "Crossword",
-    description: "Decode mixology terminology, classic formulas, and technical jargon.",
-    icon: "crossword",
-    url: "https://tileworksgamesstudio.github.io/86Crossword/",
-    category: "Word",
-    isNew: false,
-    isVisible: true,
-    order: 1
-  },
-  {
-    id: "86-specs",
-    title: "Specs",
-    description: "Master classic cocktail builds, precise pours, and standard IBA ratios.",
-    icon: "speedPour",
-    url: "https://tileworksgamesstudio.github.io/86Specs/",
-    category: "Specs",
-    isNew: true,
-    isVisible: true,
-    order: 2
-  },
-  {
-    id: "86-memory",
-    title: "Memory",
-    description: "Test your mental recall pairing glassware, bottles, and essential bar tools.",
-    icon: "flashcards",
-    url: "https://tileworksgamesstudio.github.io/86Memory/",
-    category: "Memory",
-    isNew: false,
-    isVisible: true,
-    order: 3
-  },
-  {
-    id: "86-connections",
-    title: "Connections",
-    description: "Find common threads and group ingredients by botanical & flavor profiles.",
-    icon: "connections",
-    url: "https://tileworksgamesstudio.github.io/86Connections/",
-    category: "Puzzle",
-    isNew: true,
-    isVisible: true,
-    order: 4
-  },
-  {
-    id: "86-hangman",
-    title: "Hangman",
-    description: "Guess classic cocktails, spirits, and bar terms before you get 86'd.",
-    icon: "hangman",
-    url: "https://tileworksgamesstudio.github.io/86Hangman/",
-    category: "Word",
-    isNew: false,
-    isVisible: true,
-    order: 5
-  },
-  {
-    id: "86-trivia",
-    title: "Trivia",
-    description: "Explore geography, denominations of origin, distillation styles, and bar lore.",
-    icon: "spirits",
-    url: "https://tileworksgamesstudio.github.io/86Trivia/",
-    category: "Trivia",
-    isNew: false,
-    isVisible: true,
-    order: 6
-  }
-];
-
-/* ==========================================================================
-   3. RENDERING & UX ENGINE
-   ========================================================================== */
-class GameHub {
-  constructor(catalogue, containerId, countIndicatorId) {
-    this.catalogue = catalogue;
-    this.container = document.getElementById(containerId);
-    this.countIndicator = document.getElementById(countIndicatorId);
-  }
-
+  /* ========================================================================
+     1. TILE CONFIGURATION — EDIT THESE VALUES DIRECTLY
+     ======================================================================== */
   /**
-   * Initializes the hub, validates data, and attaches interactions
+   * The 9 logical grid positions are strictly ordered:
+   * 1. Crossword       2. Connections      3. Trivia
+   * 4. Hangman         5. Specs            6. Memory
+   * 7. Spelling Bee    8. Wordle           9. Donate
+   *
+   * Toggle `enabled: false` to completely remove any tile without shifting others.
+   * Update `url` to point to the live game destination.
    */
-  init() {
-    if (!this.container) {
-      console.error("GameHub Error: Main container element not found.");
-      return;
+  const TILES_CONFIG = [
+    {
+      id: "crossword",
+      name: "Crossword",
+      url: "https://tileworksgamesstudio.github.io/86Crossword/",
+      enabled: true,
+      icon: "crossword"
+    },
+    {
+      id: "connections",
+      name: "Connections",
+      url: "https://tileworksgamesstudio.github.io/86Connections/",
+      enabled: true,
+      icon: "connections"
+    },
+    {
+      id: "trivia",
+      name: "Trivia",
+      url: "https://tileworksgamesstudio.github.io/86Trivia/",
+      enabled: true,
+      icon: "trivia"
+    },
+    {
+      id: "hangman",
+      name: "Hangman",
+      url: "https://tileworksgamesstudio.github.io/86Hangman/",
+      enabled: true,
+      icon: "hangman"
+    },
+    {
+      id: "specs",
+      name: "Specs",
+      url: "https://tileworksgamesstudio.github.io/86Specs/",
+      enabled: true,
+      icon: "specs"
+    },
+    {
+      id: "memory",
+      name: "Memory",
+      url: "https://tileworksgamesstudio.github.io/86Memory/",
+      enabled: true,
+      icon: "memory"
+    },
+    {
+      id: "spelling-bee",
+      name: "Spelling Bee",
+      url: "https://tileworksgamesstudio.github.io/86SpellingBee/",
+      enabled: true,
+      icon: "spelling-bee"
+    },
+    {
+      id: "wordle",
+      name: "Wordle",
+      url: "https://tileworksgamesstudio.github.io/86Wordle/",
+      enabled: true,
+      icon: "wordle"
+    },
+    {
+      id: "donate",
+      name: "Donate",
+      url: "https://tileworksgamesstudio.github.io/86Donate",
+      enabled: false,
+      icon: "donate"
+    }
+  ];
+
+  /* Centralized Instagram Destination URL */
+  const INSTAGRAM_URL = "https://instagram.com/tileworks_studio";
+
+  /* Animation & Interaction Timing Tokens (in milliseconds) */
+  const TIMINGS = {
+    logoHoldDuration: 800,        // Explicit requirement: ~0.8 second hold
+    logoSettleDuration: 650,      // Elastic settle bounce
+    logoExitDuration: 680,        // Forward fly-through duration
+    tileFallDuration: 520,        // Signature glass fall-through
+    gridEntranceStagger: 45,      // Controlled stagger per tile
+    repeatVisitFastIntro: true    // Session-based fast entry on return visits
+  };
+
+  /* ========================================================================
+     2. SVG ICON REGISTRY (FINE GOLD LINE ART)
+     ======================================================================== */
+  const SVG_ICONS = {
+    // Crossword: Mini refined crossword grid motif
+    crossword: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="3" width="18" height="18" rx="2.5" />
+        <line x1="9" y1="3" x2="9" y2="21" />
+        <line x1="15" y1="3" x2="15" y2="21" />
+        <line x1="3" y1="9" x2="21" y2="9" />
+        <line x1="3" y1="15" x2="21" y2="15" />
+        <rect x="9" y="3" width="6" height="6" fill="currentColor" fill-opacity="0.2" />
+        <rect x="3" y="9" width="6" height="6" fill="currentColor" fill-opacity="0.2" />
+        <rect x="15" y="15" width="6" height="6" fill="currentColor" fill-opacity="0.2" />
+      </svg>
+    `,
+
+    // Connections: 4 connected nodes / linked-tile matrix motif
+    connections: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3.5" y="3.5" width="6" height="6" rx="1.5" />
+        <rect x="14.5" y="3.5" width="6" height="6" rx="1.5" />
+        <rect x="3.5" y="14.5" width="6" height="6" rx="1.5" />
+        <rect x="14.5" y="14.5" width="6" height="6" rx="1.5" />
+        <line x1="9.5" y1="6.5" x2="14.5" y2="6.5" stroke-dasharray="1.5 1.5" />
+        <line x1="6.5" y1="9.5" x2="6.5" y2="14.5" stroke-dasharray="1.5 1.5" />
+        <line x1="17.5" y1="9.5" x2="17.5" y2="14.5" stroke-dasharray="1.5 1.5" />
+        <line x1="9.5" y1="17.5" x2="14.5" y2="17.5" stroke-dasharray="1.5 1.5" />
+      </svg>
+    `,
+
+    // Trivia: Refined knowledge seal with cocktail coupe and spark
+    trivia: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M9.5 9a2.5 2.5 0 0 1 4.8 1c0 1.5-2.3 2-2.3 3.5" />
+        <circle cx="12" cy="16.7" r="0.75" fill="currentColor" />
+      </svg>
+    `,
+
+    // Hangman: Tasteful minimalist scaffold and word blank motif
+    hangman: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 20h8" />
+        <path d="M7 20V4h8v3" />
+        <circle cx="15" cy="9.5" r="2.5" />
+        <path d="M15 12v4" />
+        <path d="M13 13.5l4 0" />
+      </svg>
+    `,
+
+    // Specs: Cocktail challenge specification card with measurement lines
+    specs: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="4" y="3" width="16" height="18" rx="2" />
+        <line x1="8" y1="7" x2="16" y2="7" />
+        <line x1="8" y1="11" x2="13" y2="11" />
+        <line x1="8" y1="15" x2="14" y2="15" />
+        <path d="M15 13l2.5 2.5L20 13" stroke-width="1.3" />
+      </svg>
+    `,
+
+    // Memory: Two matching cards in subtle perspective
+    memory: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="5" width="10" height="14" rx="1.8" />
+        <rect x="11" y="5" width="10" height="14" rx="1.8" />
+        <path d="M6.5 10a1.5 1.5 0 0 1 3 0c0 1-1.5 1.5-1.5 2.5" />
+        <circle cx="8" cy="14.5" r="0.6" fill="currentColor" />
+        <path d="M14.5 10a1.5 1.5 0 0 1 3 0c0 1-1.5 1.5-1.5 2.5" />
+        <circle cx="16" cy="14.5" r="0.6" fill="currentColor" />
+      </svg>
+    `,
+
+    // Spelling Bee: Elegant honeycomb hexagon cell with botanical bee motif
+    "spelling-bee": `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 2.5l7 4v9l-7 4-7-4v-9l7-4z" />
+        <ellipse cx="12" cy="12" rx="2" ry="3.5" />
+        <path d="M10 10.5C8 9 6.5 10 7 11.5c.5 1.5 3 1 3 1" />
+        <path d="M14 10.5C16 9 17.5 10 17 11.5c-.5 1.5-3 1-3 1" />
+      </svg>
+    `,
+
+    // Wordle: 5 letter-grid tiles row motif
+    wordle: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="2.5" y="4" width="19" height="16" rx="2.5" />
+        <line x1="2.5" y1="9.3" x2="21.5" y2="9.3" />
+        <line x1="2.5" y1="14.6" x2="21.5" y2="14.6" />
+        <line x1="6.3" y1="4" x2="6.3" y2="20" />
+        <line x1="10.1" y1="4" x2="10.1" y2="20" />
+        <line x1="13.9" y1="4" x2="13.9" y2="20" />
+        <line x1="17.7" y1="4" x2="17.7" y2="20" />
+        <path d="M11 12l1 1 2-2" stroke-width="1.6" />
+      </svg>
+    `,
+
+    // Donate: Luxury coupette give-back / hospitality spark motif
+    donate: `
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 5h12l-1 5a5 5 0 0 1-10 0L6 5z" />
+        <line x1="12" y1="10" x2="12" y2="18" />
+        <line x1="8" y1="18" x2="16" y2="18" />
+        <path d="M12 2v2" />
+        <path d="M11 3a1 1 0 0 1 2 0c0 1-1 1.5-1 2.5" stroke-width="1.2" />
+      </svg>
+    `
+  };
+
+  /* ========================================================================
+     3. GARNISH ILLUSTRATION LIBRARY (LUXURY COCKTAIL LINE ART)
+     ======================================================================== */
+  const GARNISH_SHAPES = [
+    // 1. Orange Peel Twist / Spiral
+    `<svg viewBox="0 0 32 32" fill="none" stroke-width="1.3" stroke-linecap="round"><path d="M8 24c2-6 8-8 12-4s2 8-4 10-9-5-7-12c1.5-5.5 8-8 13-6" /></svg>`,
+
+    // 2. Dehydrated Citrus Wheel
+    `<svg viewBox="0 0 32 32" fill="none" stroke-width="1.3"><circle cx="16" cy="16" r="13" /><circle cx="16" cy="16" r="10.5" stroke-dasharray="2 1.5" /><circle cx="16" cy="16" r="2.2" /><line x1="16" y1="5.5" x2="16" y2="13.8" /><line x1="16" y1="18.2" x2="16" y2="26.5" /><line x1="5.5" y1="16" x2="13.8" y2="16" /><line x1="18.2" y1="16" x2="26.5" y2="16" /><line x1="8.5" y1="8.5" x2="14.4" y2="14.4" /><line x1="17.6" y1="17.6" x2="23.5" y2="23.5" /><line x1="8.5" y1="23.5" x2="14.4" y2="17.6" /><line x1="17.6" y1="14.4" x2="23.5" y2="8.5" /></svg>`,
+
+    // 3. Lime / Lemon Wedge
+    `<svg viewBox="0 0 32 32" fill="none" stroke-width="1.3"><path d="M6 10a14 14 0 0 0 20 14L6 10z" /><path d="M9 12a10.5 10.5 0 0 0 15 11L9 12z" /><line x1="9" y1="12" x2="18" y2="21" /><line x1="13.5" y1="12" x2="20" y2="18" /><line x1="10" y1="16" x2="15" y2="21" /></svg>`,
+
+    // 4. Mint Sprig
+    `<svg viewBox="0 0 32 32" fill="none" stroke-width="1.3" stroke-linecap="round"><path d="M16 27V9" /><path d="M16 19c-4-4-9-2-9 3s5 3 9-3z" /><path d="M16 15c4-4 9-2 9 3s-5 3-9-3z" /><path d="M16 9c-3-4-7-3-7 1s4 3 7-1z" /><path d="M16 9c3-4 7-3 7 1s-4 3-7-1z" /></svg>`,
+
+    // 5. Cherries on Stems
+    `<svg viewBox="0 0 32 32" fill="none" stroke-width="1.3" stroke-linecap="round"><circle cx="10" cy="22" r="5" /><circle cx="22" cy="21" r="5" /><path d="M10 17c2-8 7-11 11-13" /><path d="M22 16c-1-7-3-10-1-12" /><path d="M16 5c2-2 5-1 6 0" /></svg>`,
+
+    // 6. Rosemary Sprig
+    `<svg viewBox="0 0 32 32" fill="none" stroke-width="1.2" stroke-linecap="round"><line x1="6" y1="26" x2="26" y2="6" /><path d="M12 20l-4-3m8-1l-4-3m8-1l-4-3" /><path d="M20 12l3 4m-7-1l3 4m-7-1l3 4" /></svg>`,
+
+    // 7. Olive on Luxury Garnish Pick
+    `<svg viewBox="0 0 32 32" fill="none" stroke-width="1.3"><line x1="4" y1="28" x2="28" y2="4" /><ellipse cx="16" cy="16" rx="5.5" ry="8" transform="rotate(-45 16 16)" /><circle cx="14" cy="14" r="1.5" stroke-width="1" /></svg>`,
+
+    // 8. Star Anise Pod
+    `<svg viewBox="0 0 32 32" fill="none" stroke-width="1.2"><path d="M16 10l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6z" /><circle cx="16" cy="16" r="2" /></svg>`,
+
+    // 9. Botanical Cucumber Ribbon
+    `<svg viewBox="0 0 32 32" fill="none" stroke-width="1.3" stroke-linecap="round"><path d="M6 22c5 4 15 4 20-2s-3-10-8-8-12 1-12-6 8-6 15-2" /></svg>`
+  ];
+
+  /* ========================================================================
+     4. APPLICATION STATE CONTROLLER
+     ======================================================================== */
+  const AppState = {
+    PHASE: "INTRO", // 'INTRO' | 'READY' | 'NAVIGATING'
+    isLocked: false,
+    reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  };
+
+  /* Cache Key DOM Elements */
+  const introStage = document.getElementById("intro-stage");
+  const introLogo = document.getElementById("intro-logo");
+  const introLogoFallback = document.getElementById("intro-logo-fallback");
+  const gameGrid = document.getElementById("game-grid");
+  const instagramLink = document.getElementById("instagram-link");
+  const garnishLayer = document.getElementById("garnish-layer");
+
+  /* ========================================================================
+     5. INITIALIZATION
+     ======================================================================== */
+  function init() {
+    // Configure Instagram URL
+    if (instagramLink) {
+      instagramLink.href = INSTAGRAM_URL;
     }
 
-    this.render();
-  }
+    // Build the 9 fixed grid cells
+    renderGridStructure();
 
-  /**
-   * Validates and returns visible items ordered by display index
-   */
-  getValidGames() {
-    return this.catalogue
-      .filter(game => game && game.isVisible !== false && game.id && game.title)
-      .sort((a, b) => (a.order || 99) - (b.order || 99));
-  }
+    // Check session state for return visit choreography
+    const hasSeenIntro = sessionStorage.getItem("tw_hub_intro_seen") === "true";
 
-  /**
-   * Generates DOM elements for each game entry
-   */
-  render() {
-    const activeGames = this.getValidGames();
-
-    // Update footer count indicator
-    if (this.countIndicator) {
-      this.countIndicator.textContent = `${activeGames.length} Game${activeGames.length === 1 ? '' : 's'} Available`;
+    if (AppState.reducedMotion || (TIMINGS.repeatVisitFastIntro && hasSeenIntro)) {
+      // Fast bypass for repeat visits or users preferring reduced motion
+      skipIntroToGrid();
+    } else {
+      // Run cinematic brand intro
+      executeCinematicIntro();
     }
 
-    // Handle empty state gracefully
-    if (activeGames.length === 0) {
-      this.renderEmptyState();
-      return;
-    }
+    // Start background garnish particle engine
+    initGarnishSystem();
 
-    // Clean container and mark loading state complete
-    this.container.innerHTML = '';
-    this.container.setAttribute('aria-busy', 'false');
+    // Setup global window visibility handling to preserve battery
+    setupVisibilityLifecycle();
+  }
 
-    // Build cards
-    activeGames.forEach((game, index) => {
-      const tile = this.createTileElement(game, index);
-      this.container.appendChild(tile);
+  /* ========================================================================
+     6. GRID RENDERING & FIXED POSITION ARCHITECTURE
+     ======================================================================== */
+  function renderGridStructure() {
+    if (!gameGrid) return;
+    gameGrid.innerHTML = "";
+
+    // Exactly 9 fixed logical positions
+    TILES_CONFIG.forEach((tile, index) => {
+      const cell = document.createElement("div");
+      cell.className = "grid-cell";
+      cell.setAttribute("data-index", index);
+
+      // If tile is enabled, construct the interactive glass link
+      if (tile.enabled === true) {
+        const link = document.createElement("a");
+        link.className = "tile-link";
+        link.href = tile.url;
+        link.setAttribute("data-id", tile.id);
+        link.setAttribute("aria-label", `Open ${tile.name}`);
+        link.setAttribute("role", "listitem");
+
+        // Icon Container
+        const iconWrap = document.createElement("div");
+        iconWrap.className = "tile-icon";
+        iconWrap.innerHTML = SVG_ICONS[tile.icon] || SVG_ICONS.crossword;
+
+        // Name Label
+        const label = document.createElement("span");
+        label.className = "tile-name";
+        label.textContent = tile.name;
+
+        link.appendChild(iconWrap);
+        link.appendChild(label);
+
+        // Bind tactile interaction & 3D fall-through
+        bindTileInteraction(link, tile.url);
+
+        cell.appendChild(link);
+      } else {
+        // Explicit Requirement: Disabled tile disappears completely.
+        // The slot remains as intentional negative space revealing the background.
+        cell.classList.add("is-empty");
+        cell.setAttribute("aria-hidden", "true");
+      }
+
+      gameGrid.appendChild(cell);
     });
   }
 
-  /**
-   * Constructs an individual accessible card node
-   */
-  createTileElement(game, index) {
-    const anchor = document.createElement('a');
-    anchor.className = 'game-tile';
-    anchor.href = game.url || '#';
-    anchor.setAttribute('role', 'article');
-    anchor.setAttribute('aria-label', `${game.title}. ${game.description || ''}`);
+  /* ========================================================================
+     7. TILE INTERACTION & 3D FALL-THROUGH CHOREOGRAPHY
+     ======================================================================== */
+  function bindTileInteraction(link, destinationUrl) {
+    // Touch/Mouse Press Immediate Feedback
+    link.addEventListener("pointerdown", function () {
+      if (AppState.isLocked) return;
+      link.classList.add("is-pressed");
+    });
 
-    // Stagger animation timing slightly for polished page load
-    anchor.style.animationDelay = `${index * 55}ms`;
-    anchor.classList.add('is-visible');
+    link.addEventListener("pointerup", function () {
+      link.classList.remove("is-pressed");
+    });
 
-    // Resolve icon or fallback
-    const iconSvg = ICONS[game.icon] || ICONS.fallback;
+    link.addEventListener("pointercancel", function () {
+      link.classList.remove("is-pressed");
+    });
 
-    // Optional tags/labels
-    const newBadgeHtml = game.isNew ? `<span class="badge-new" aria-label="Newly Added">NEW</span>` : '';
-    const categoryHtml = game.category ? `<span class="badge-category">${this.escapeHtml(game.category)}</span>` : '';
+    // Primary Click & Keyboard Activation
+    link.addEventListener("click", function (event) {
+      event.preventDefault();
 
-    anchor.innerHTML = `
-      <div class="tile-icon-box">
-        ${iconSvg}
-      </div>
-      <div class="tile-content">
-        <div class="tile-header-line">
-          <span class="tile-title">${this.escapeHtml(game.title)}</span>
-          ${categoryHtml}
-          ${newBadgeHtml}
-        </div>
-        <p class="tile-description">${this.escapeHtml(game.description || 'Practice bartending knowledge.')}</p>
-      </div>
-      <div class="tile-action">
-        ${CHEVRON_SVG}
-      </div>
-    `;
-
-    // Bind event handlers for tactile navigation & touch feedback
-    this.bindInteractions(anchor);
-
-    return anchor;
-  }
-
-  /**
-   * Binds touch, press, and click navigation feedback
-   */
-  bindInteractions(element) {
-    // Touch feedback
-    element.addEventListener('touchstart', () => {
-      element.classList.add('is-active');
-    }, { passive: true });
-
-    element.addEventListener('touchend', () => {
-      element.classList.remove('is-active');
-    }, { passive: true });
-
-    element.addEventListener('touchcancel', () => {
-      element.classList.remove('is-active');
-    }, { passive: true });
-
-    // Click launch confirmation
-    element.addEventListener('click', (e) => {
-      if (element.getAttribute('href').startsWith('#')) {
-        e.preventDefault();
-        element.classList.add('launching');
-        setTimeout(() => {
-          element.classList.remove('launching');
-        }, 350);
+      // Guard against double clicks and intro phase locks
+      if (AppState.isLocked || AppState.PHASE !== "READY") {
         return;
       }
 
-      element.classList.add('launching');
+      // Lock further navigation
+      AppState.isLocked = true;
+      AppState.PHASE = "NAVIGATING";
+
+      // Apply dimming state to the grid container
+      gameGrid.classList.add("locked");
+
+      // Reduced motion bypass
+      if (AppState.reducedMotion) {
+        window.location.href = destinationUrl;
+        return;
+      }
+
+      // Trigger signature 3D Fall-Through transition
+      link.classList.remove("is-pressed");
+      link.classList.add("is-falling");
+
+      // Navigate once animation has reached the exit threshold
+      setTimeout(() => {
+        window.location.href = destinationUrl;
+      }, TIMINGS.tileFallDuration);
     });
   }
 
-  /**
-   * Renders intentional empty state if catalogue has 0 visible games
-   */
-  renderEmptyState() {
-    this.container.innerHTML = `
-      <div class="hub-empty-state">
-        <svg class="hub-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <circle cx="12" cy="12" r="9"/>
-          <path d="M12 8v4M12 16h.01"/>
-        </svg>
-        <h2 class="hub-empty-title">Games In Preparation</h2>
-        <p class="hub-empty-desc">The cocktail roster is currently updating. Please check back soon.</p>
-      </div>
-    `;
-    this.container.setAttribute('aria-busy', 'false');
+  /* ========================================================================
+     8. CINEMATIC LOGO INTRO SEQUENCE
+     ======================================================================== */
+  function executeCinematicIntro() {
+    if (!introStage) {
+      revealGameGrid();
+      return;
+    }
+
+    // Logo image error handling: graceful fallback to styled wordmark
+    if (introLogo) {
+      introLogo.onerror = function () {
+        introLogo.style.display = "none";
+        if (introLogoFallback) {
+          introLogoFallback.style.display = "flex";
+        }
+      };
+    }
+
+    // Mark session as seen
+    try {
+      sessionStorage.setItem("tw_hub_intro_seen", "true");
+    } catch (e) {
+      /* Session storage not available or cookies disabled */
+    }
+
+    // Step 1: Logo appears, settles with elastic bounce
+    requestAnimationFrame(() => {
+      introStage.classList.add("enter");
+    });
+
+    // Step 2: Hold for approximately 0.8 seconds (explicit mandate)
+    const holdStartTime = TIMINGS.logoSettleDuration;
+
+    setTimeout(() => {
+      // Step 3: Logo moves toward viewer and beyond camera
+      introStage.classList.remove("enter");
+      introStage.classList.add("exit");
+
+      // Step 4: Grid seamlessly begins emerging as logo takes flight
+      setTimeout(() => {
+        revealGameGrid();
+
+        // Cleanup intro overlay from DOM flow
+        setTimeout(() => {
+          introStage.style.display = "none";
+        }, TIMINGS.logoExitDuration);
+      }, 160);
+    }, holdStartTime + TIMINGS.logoHoldDuration);
   }
 
-  /**
-   * Simple HTML escaper to protect UI from arbitrary string injections
-   */
-  escapeHtml(str) {
-    if (typeof str !== 'string') return '';
-    return str
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+  function skipIntroToGrid() {
+    if (introStage) {
+      introStage.style.display = "none";
+    }
+    revealGameGrid(true);
   }
-}
 
-/* ==========================================================================
-   4. BOOTSTRAP ON DOM CONTENT LOADED
-   ========================================================================== */
-document.addEventListener('DOMContentLoaded', () => {
-  const hub = new GameHub(GAMES_CATALOGUE, 'game-grid', 'game-count-indicator');
-  hub.init();
-});
+  /* ========================================================================
+     9. GAME GRID ENTRANCE CHOREOGRAPHY
+     ======================================================================== */
+  function revealGameGrid(isInstant) {
+    AppState.PHASE = "READY";
+    AppState.isLocked = false;
+
+    const cells = gameGrid ? gameGrid.querySelectorAll(".grid-cell") : [];
+
+    if (isInstant || AppState.reducedMotion) {
+      cells.forEach((cell) => {
+        const link = cell.querySelector(".tile-link");
+        if (link) {
+          link.style.opacity = "1";
+          link.style.transform = "none";
+        }
+      });
+      return;
+    }
+
+    // Staggered emergence (Center-outward or diagonal rhythm)
+    cells.forEach((cell, index) => {
+      const link = cell.querySelector(".tile-link");
+      if (!link) return;
+
+      // Calculate smooth visual stagger
+      const row = Math.floor(index / 3);
+      const col = index % 3;
+      const staggerDelay = (row + col) * TIMINGS.gridEntranceStagger;
+
+      cell.classList.add("emerging");
+      link.style.animationDelay = `${staggerDelay}ms`;
+
+      setTimeout(() => {
+        cell.classList.remove("emerging");
+        link.style.animationDelay = "";
+      }, 850 + staggerDelay);
+    });
+  }
+
+  /* ========================================================================
+     10. COCKTAIL GARNISH BACKGROUND SYSTEM (BOUNDED & EFFICIENT)
+     ======================================================================== */
+  const GARNISH_SETTINGS = {
+    targetCount: window.innerWidth < 480 ? 7 : 9, // Approximately 7-10 visible
+    maxPool: 10,
+    speedMin: 0.28,
+    speedMax: 0.65,
+    lateralDrift: 0.35
+  };
+
+  let activeGarnishList = [];
+  let garnishAnimationId = null;
+  let isWindowVisible = true;
+
+  function initGarnishSystem() {
+    if (!garnishLayer || AppState.reducedMotion) return;
+
+    // Pre-populate pool with staggered heights to avoid burst spawning
+    for (let i = 0; i < GARNISH_SETTINGS.targetCount; i++) {
+      const item = createGarnishElement();
+      // Distribute initial vertical positions across the viewport
+      item.y = Math.random() * window.innerHeight;
+      item.x = Math.random() * (window.innerWidth - 60) + 30;
+      activeGarnishList.push(item);
+      garnishLayer.appendChild(item.el);
+    }
+
+    startGarnishLoop();
+  }
+
+  function createGarnishElement() {
+    const el = document.createElement("div");
+    el.className = "garnish-item";
+
+    const svgTemplate = GARNISH_SHAPES[Math.floor(Math.random() * GARNISH_SHAPES.length)];
+    el.innerHTML = svgTemplate;
+
+    const size = Math.floor(Math.random() * 16) + 30; // 30px to 46px
+    el.style.setProperty("--size", `${size}px`);
+
+    return {
+      el: el,
+      size: size,
+      x: Math.random() * (window.innerWidth - 60) + 30,
+      y: window.innerHeight + size + (Math.random() * 60),
+      speedY: Math.random() * (GARNISH_SETTINGS.speedMax - GARNISH_SETTINGS.speedMin) + GARNISH_SETTINGS.speedMin,
+      driftAngle: Math.random() * Math.PI * 2,
+      driftSpeed: (Math.random() * 0.015) + 0.008,
+      rotation: Math.random() * 360,
+      rotSpeed: (Math.random() - 0.5) * 0.32,
+      baseOpacity: (Math.random() * 0.28) + 0.38
+    };
+  }
+
+  function startGarnishLoop() {
+    if (AppState.reducedMotion) return;
+
+    let lastTime = performance.now();
+
+    function update(time) {
+      if (!isWindowVisible) {
+        garnishAnimationId = requestAnimationFrame(update);
+        return;
+      }
+
+      const delta = Math.min((time - lastTime) / 16.66, 2.5); // Normalized frame delta
+      lastTime = time;
+
+      const viewportHeight = window.innerHeight;
+      const glowThreshold = viewportHeight * 0.72; // Ambient bottom bar light boundary
+
+      for (let i = 0; i < activeGarnishList.length; i++) {
+        const item = activeGarnishList[i];
+
+        // Organic upward float
+        item.y -= item.speedY * delta;
+        item.driftAngle += item.driftSpeed * delta;
+        item.x += Math.sin(item.driftAngle) * GARNISH_SETTINGS.lateralDrift * delta;
+        item.rotation += item.rotSpeed * delta;
+
+        // Reset when floating past screen top
+        if (item.y < -item.size - 20) {
+          item.y = viewportHeight + item.size + (Math.random() * 40);
+          item.x = Math.random() * (window.innerWidth - 60) + 30;
+          item.speedY = Math.random() * (GARNISH_SETTINGS.speedMax - GARNISH_SETTINGS.speedMin) + GARNISH_SETTINGS.speedMin;
+          item.rotation = Math.random() * 360;
+        }
+
+        // Soft fade-in at bottom and gentle fade-out at top
+        let opacity = item.baseOpacity;
+        if (item.y > viewportHeight - 80) {
+          opacity *= Math.max(0, (viewportHeight - item.y) / 80);
+        } else if (item.y < 90) {
+          opacity *= Math.max(0, item.y / 90);
+        }
+
+        // Catch the warm bar ambient light when passing through lower region
+        const inLightZone = item.y > glowThreshold;
+        if (inLightZone && !item.inGlow) {
+          item.inGlow = true;
+          item.el.classList.add("in-glow");
+        } else if (!inLightZone && item.inGlow) {
+          item.inGlow = false;
+          item.el.classList.remove("in-glow");
+        }
+
+        // GPU-accelerated 3D transform
+        item.el.style.opacity = opacity.toFixed(3);
+        item.el.style.transform = `translate3d(${item.x.toFixed(1)}px, ${item.y.toFixed(1)}px, 0) rotate(${item.rotation.toFixed(1)}deg)`;
+      }
+
+      garnishAnimationId = requestAnimationFrame(update);
+    }
+
+    garnishAnimationId = requestAnimationFrame(update);
+  }
+
+  /* ========================================================================
+     11. PERFORMANCE & VISIBILITY LIFECYCLE
+     ======================================================================== */
+  function setupVisibilityLifecycle() {
+    document.addEventListener("visibilitychange", () => {
+      isWindowVisible = !document.hidden;
+    });
+
+    // Recalculate layout metrics upon orientation change or window resize
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        GARNISH_SETTINGS.targetCount = window.innerWidth < 480 ? 7 : 9;
+      }, 250);
+    });
+  }
+
+  /* ========================================================================
+     12. RUN INITIALIZATION ON DOM READY
+     ======================================================================== */
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
