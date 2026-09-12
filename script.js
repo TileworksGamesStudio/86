@@ -22,7 +22,7 @@
       id: "crossword",
       name: "Crossword",
       url: "https://tileworksgamesstudio.github.io/86Crossword/",
-      enabled: true,
+      enabled: false,
       icon: "crossword"
     },
     {
