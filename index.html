@@ -3,93 +3,219 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="description" content="The Bartender Games — A curated luxury cocktail puzzle parlour by Tileworks." />
-  <meta name="theme-color" content="#120502" />
-
-  <title>The Bartender Games | Tileworks</title>
-
-  <!-- Preload Logo for Instant Entrance Choreography -->
-  <link rel="preload" href="logo.png" as="image" />
-
-  <!-- Premium Typography -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
+  <title>Game Collection | The Speakeasy Parlour</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Atmospheric Cocktail Lounge Background Layers -->
-  <div class="atmosphere" aria-hidden="true">
-    <div class="atmosphere-base"></div>
-    <div class="atmosphere-radial"></div>
-    <div class="atmosphere-grain"></div>
-    <div class="atmosphere-light-source"></div>
-    <div class="atmosphere-garnishes" id="garnish-layer"></div>
+  <!-- Ambient Atmosphere Lighting & Caustics -->
+  <div class="lounge-caustics" aria-hidden="true">
+    <div class="caustic caustic-1"></div>
+    <div class="caustic caustic-2"></div>
+    <div class="caustic caustic-3"></div>
   </div>
 
-  <!-- Cinematic Logo Intro Overlay -->
-  <div class="intro-stage" id="intro-stage" aria-hidden="true">
-    <div class="intro-logo-wrapper" id="intro-logo-wrapper">
-      <img src="logo.png" alt="Tileworks Games" class="intro-logo" id="intro-logo" />
-      <div class="intro-logo-fallback" id="intro-logo-fallback">
-        <span class="fallback-wordmark">TILEWORKS</span>
-        <span class="fallback-sub">COCKTAIL SUITE</span>
+  <!-- Ambient Vignette & Texture Grain -->
+  <div class="lounge-vignette" aria-hidden="true"></div>
+  <div class="lounge-grain" aria-hidden="true"></div>
+
+  <!-- Atmospheric Cocktail Garnish Float Layer (12 Unique Silhouettes) -->
+  <div id="garnish-stage" class="garnish-stage" aria-hidden="true"></div>
+
+  <!-- Primary Application Container -->
+  <div class="hub-wrapper">
+    <!-- Header: Editorial Cocktail Menu Style -->
+    <header class="hub-header">
+      <div class="menu-pre-title" aria-hidden="true">
+        <span class="ornament-line"></span>
+        <span class="ornament-diamond">◆</span>
+        <span class="menu-kicker">The Reserve Parlour</span>
+        <span class="ornament-diamond">◆</span>
+        <span class="ornament-line"></span>
+      </div>
+      <h1 class="hub-title">Game Collection</h1>
+      <p class="hub-subtitle">Select a game to play</p>
+      <div class="menu-divider" aria-hidden="true">
+        <span class="divider-line"></span>
+        <span class="divider-gem">✦</span>
+        <span class="divider-line"></span>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="hub-main">
+      <!-- 3x3 Game Grid with Smoked Glass & Polished Brass Detailing -->
+      <div id="game-grid" class="game-grid" role="list" aria-label="Available Games">
+        <!-- Rendered dynamically by script.js -->
+      </div>
+
+      <!-- Secondary Companion Utility Tiles -->
+      <nav class="utility-bar" aria-label="Quick Actions">
+        <!-- 1. Instagram Link with Camera Flash & Brass Rim -->
+        <a 
+          href="https://instagram.com" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="utility-tile tile-instagram" 
+          id="btn-instagram"
+          aria-label="Visit our Instagram"
+        >
+          <div class="utility-icon icon-camera" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="svg-camera">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <circle cx="12" cy="12" r="4"></circle>
+              <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"></circle>
+            </svg>
+            <span class="camera-flash-ring"></span>
+            <span class="camera-flash-core"></span>
+          </div>
+        </a>
+
+        <!-- 2. Settings with Smooth Rotating Gear -->
+        <button 
+          type="button" 
+          class="utility-tile tile-settings" 
+          id="btn-settings" 
+          aria-label="Open Settings"
+          aria-haspopup="dialog"
+          aria-expanded="false"
+        >
+          <div class="utility-icon icon-gear" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="svg-gear">
+              <circle cx="12" cy="12" r="3.2"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </div>
+        </button>
+
+        <!-- 3. Donate with Beating Heart -->
+        <button 
+          type="button" 
+          class="utility-tile tile-donate" 
+          id="btn-donate" 
+          aria-label="Support and Donate"
+          aria-haspopup="dialog"
+          aria-expanded="false"
+        >
+          <div class="utility-icon icon-heart" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="svg-heart">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </div>
+        </button>
+      </nav>
+    </main>
+
+    <!-- Footer with Fine Craft Detailing -->
+    <footer class="hub-footer">
+      <div class="footer-gem" aria-hidden="true">✦</div>
+      <a href="https://github.com" id="external-link" class="footer-link" target="_blank" rel="noopener noreferrer">
+        About &amp; Info
+      </a>
+    </footer>
+  </div>
+
+  <!-- =========================================================================
+       MODALS & SLIDE-UP BOTTOM SHEETS (Smoked Glass & Brass Accents)
+       ========================================================================= -->
+  <div id="modal-backdrop" class="modal-backdrop" aria-hidden="true"></div>
+
+  <!-- Settings Bottom Sheet -->
+  <div 
+    id="settings-modal" 
+    class="modal-sheet" 
+    role="dialog" 
+    aria-modal="true" 
+    aria-labelledby="settings-title"
+    hidden
+  >
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-header">
+      <h2 id="settings-title" class="sheet-title">Preferences</h2>
+      <button type="button" class="sheet-close" id="close-settings" aria-label="Close settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="sheet-content">
+      <!-- Sound FX Switch -->
+      <div class="setting-row">
+        <div class="setting-info">
+          <span class="setting-label">Sound FX</span>
+          <span class="setting-desc">Tactile crystal tones &amp; muted brass taps</span>
+        </div>
+        <label class="switch" for="toggle-sound">
+          <input type="checkbox" id="toggle-sound" checked />
+          <span class="slider" aria-hidden="true"></span>
+        </label>
+      </div>
+
+      <!-- Animations Switch -->
+      <div class="setting-row">
+        <div class="setting-info">
+          <span class="setting-label">Animations</span>
+          <span class="setting-desc">Floating garnishes &amp; bar caustics</span>
+        </div>
+        <label class="switch" for="toggle-animations">
+          <input type="checkbox" id="toggle-animations" checked />
+          <span class="slider" aria-hidden="true"></span>
+        </label>
       </div>
     </div>
   </div>
 
-  <!-- Main Viewport Interface -->
-  <div class="viewport-wrapper" id="viewport-wrapper">
-    <main class="hub-container" id="hub-container" role="main">
-
-      <!-- Dynamic Lounge Title Header -->
-      <header class="hub-header" id="hub-header">
-        <div class="header-eyebrow">
-          <span class="eyebrow-line left"></span>
-          <span class="eyebrow-text">TILEWORKS PARLOUR</span>
-          <span class="eyebrow-line right"></span>
-        </div>
-
-        <h1 class="hub-title" aria-label="The Bartender Games">
-          <span class="title-part-small">THE</span>
-          <span class="title-part-hero">BARTENDER</span>
-          <span class="title-part-sub">GAMES</span>
-        </h1>
-
-        <div class="header-tagline">
-          <span class="tagline-dot">◆</span>
-          <span class="tagline-text">Daily Challenges &amp; Cellar Specs</span>
-          <span class="tagline-dot">◆</span>
-        </div>
-      </header>
-
-      <!-- 3×3 Glass Matrix Grid -->
-      <div class="grid-perspective-box">
-        <div class="game-grid" id="game-grid" role="list" aria-label="Bartender Games Collection">
-          <!-- Populated dynamically via script.js -->
-        </div>
+  <!-- Donate Bottom Sheet -->
+  <div 
+    id="donate-modal" 
+    class="modal-sheet modal-donate" 
+    role="dialog" 
+    aria-modal="true" 
+    aria-labelledby="donate-title"
+    hidden
+  >
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-header">
+      <div class="donate-badge" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
       </div>
+      <h2 id="donate-title" class="sheet-title">Keep Games Ad-Free</h2>
+      <button type="button" class="sheet-close" id="close-donate" aria-label="Close donation dialog">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
 
-      <!-- Subtle Centered Gold Social Anchor -->
-      <nav class="social-shelf" id="social-shelf" aria-label="Social Links">
-        <a 
-          href="https://instagram.com/tileworks_studio" 
-          id="instagram-link" 
-          class="instagram-btn" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          aria-label="Visit Tileworks Games on Instagram"
-        >
-          <svg class="instagram-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-          </svg>
-        </a>
-      </nav>
+    <div class="sheet-content donate-body">
+      <p class="donate-intro">
+        Thank you for spending time in our parlour. We crafted this collection to provide an ultra-clean, serene, ad-free gaming experience.
+      </p>
+      <p class="donate-sub">
+        Zero trackers, zero pop-up banners, and zero interruptions. Any gracious contribution directly powers server hosting and new puzzle craft.
+      </p>
 
-    </main>
+      <!-- Specified Stripe Donation Link -->
+      <a 
+        href="https://buy.stripe.com/14AbJ0czm3Ct3ARdPgefC0U" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        class="donate-action-btn"
+        id="stripe-donate-link"
+      >
+        <span>Donate to Support</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+
+      <p class="donate-appreciation">Thank you so much for keeping the lights on! ❤️</p>
+    </div>
   </div>
 
   <script src="script.js"></script>
