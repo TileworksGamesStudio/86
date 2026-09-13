@@ -13,7 +13,7 @@
     { id: "connections", name: "Connections", url: "https://tileworksgamesstudio.github.io/86Connections/", enabled: true, icon: "nodes" },
     { id: "trivia", name: "Trivia", url: "https://tileworksgamesstudio.github.io/86Trivia/", enabled: true, icon: "help" },
     { id: "hangman", name: "Hangman", url: "https://tileworksgamesstudio.github.io/86Hangman/", enabled: true, icon: "text" },
-    { id: "specs", name: "Match", url: "https://tileworksgamesstudio.github.io/86Specs/", enabled: true, icon: "check" },
+    { id: "specs", name: "Specs", url: "https://tileworksgamesstudio.github.io/86Specs/", enabled: true, icon: "check" },
     { id: "memory", name: "Memory", url: "https://tileworksgamesstudio.github.io/86Memory/", enabled: true, icon: "cards" },
     { id: "spelling-bee", name: "Letters", url: "https://tileworksgamesstudio.github.io/86SpellingBee/", enabled: true, icon: "hex" },
     { id: "wordle", name: "Wordle", url: "https://tileworksgamesstudio.github.io/86Wordle/", enabled: true, icon: "rows" },
