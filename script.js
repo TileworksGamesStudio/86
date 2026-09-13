@@ -17,7 +17,7 @@
     { id: "memory", name: "Memory", url: "https://tileworksgamesstudio.github.io/86Memory/", enabled: true, icon: "cards" },
     { id: "spelling-bee", name: "Letters", url: "https://tileworksgamesstudio.github.io/86SpellingBee/", enabled: true, icon: "hex" },
     { id: "wordle", name: "Wordle", url: "https://tileworksgamesstudio.github.io/86Wordle/", enabled: true, icon: "rows" },
-    { id: "extra", name: "Wordsearch", url: "https://tileworksgamesstudio.github.io/86Wordsearch/", enabled: true, icon: "plus" }
+    { id: "extra", name: "Word Search", url: "https://tileworksgamesstudio.github.io/86Wordsearch/", enabled: true, icon: "plus" }
   ];
 
   /* --------------------------------------------------------------------------
