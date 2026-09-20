@@ -15,7 +15,7 @@
     { id: "hangman",      name: "Hangman",     desc: "Guess the phrase",     url: "https://tileworksgamesstudio.github.io/86Hangman/",     enabled: true,  icon: "text" },
     { id: "specs",        name: "Match",       desc: "Pair identical cards", url: "https://tileworksgamesstudio.github.io/86Specs/",       enabled: true,  icon: "check" },
     { id: "memory",       name: "Memory",      desc: "Pattern recall",       url: "https://tileworksgamesstudio.github.io/86Memory/",      enabled: true,  icon: "cards" },
-    { id: "spelling-bee", name: "Letters",     desc: "Form 4+ letter words", url: "https://tileworksgamesstudio.github.io/86SpellingBee/",    enabled: true,  icon: "hex" },
+    { id: "spelling-bee", name: "Letters",     desc: "Form 4+ letter words", url: "https://tileworksgamesstudio.github.io/86SpellingBee/", enabled: true,  icon: "hex" },
     { id: "wordle",       name: "Word Guess",  desc: "5-letter challenge",   url: "https://tileworksgamesstudio.github.io/86Wordle/",      enabled: true,  icon: "rows" },
     { id: "wordsearch",   name: "Wordsearch",  desc: "Find hidden words",    url: "https://tileworksgamesstudio.github.io/86Wordsearch/",  enabled: true,  icon: "dice" }
   ];
@@ -156,15 +156,17 @@
   ];
 
   /* --------------------------------------------------------------------------
-     3. High-Performance Garnish Flight System (Pooled & Flash-Free)
+     3. High-Performance Garnish Flight System (Responsive Safe Bounds)
      -------------------------------------------------------------------------- */
   class GarnishFlightSystem {
     constructor(containerEl) {
       this.container = containerEl;
       this.garnishes = [];
-      this.targetCount = 8; // Maintain 6 to 9 visible garnishes
+      this.targetCount = 8;
       this.rafId = null;
       this.lastTime = performance.now();
+      this.viewportW = window.innerWidth;
+      this.viewportH = window.innerHeight;
       this.depthProfiles = [
         { name: "depth-far",  minScale: 0.60, maxScale: 0.75, minSpeed: 20, maxSpeed: 30, opacity: 0.45 },
         { name: "depth-mid",  minScale: 0.85, maxScale: 1.05, minSpeed: 30, maxSpeed: 44, opacity: 0.75 },
@@ -172,24 +174,26 @@
       ];
     }
 
+    onResize() {
+      this.viewportW = window.innerWidth;
+      this.viewportH = window.innerHeight;
+    }
+
     init() {
       if (!this.container) return;
       this.container.innerHTML = "";
       this.garnishes = [];
+      this.onResize();
 
-      const windowH = window.innerHeight;
-      const windowW = window.innerWidth;
-
-      // Stagger spawn positions evenly across height
       for (let i = 0; i < this.targetCount; i++) {
-        const initialY = (windowH / this.targetCount) * i + (Math.random() * 30 - 15);
-        this.createPooledGarnish(initialY, windowH, windowW);
+        const initialY = (this.viewportH / this.targetCount) * i + (Math.random() * 30 - 15);
+        this.createPooledGarnish(initialY);
       }
 
       this.start();
     }
 
-    createPooledGarnish(initialY, windowH, windowW) {
+    createPooledGarnish(initialY) {
       const depth = this.depthProfiles[Math.floor(Math.random() * this.depthProfiles.length)];
       const svgIndex = Math.floor(Math.random() * GARNISH_SVGS.length);
 
@@ -199,18 +203,17 @@
 
       const scale = depth.minScale + Math.random() * (depth.maxScale - depth.minScale);
       const speed = depth.minSpeed + Math.random() * (depth.maxSpeed - depth.minSpeed);
-      const startX = 6 + Math.random() * 88;
+      const startX = 10 + Math.random() * 80;
       const rotSpeed = (Math.random() * 10 + 5) * (Math.random() > 0.5 ? 1 : -1);
-      const driftAmp = 16 + Math.random() * 22;
+      const driftAmp = 12 + Math.random() * 18;
       const driftFreq = 0.0008 + Math.random() * 0.0008;
       const rotation = Math.random() * 360;
       const phase = Math.random() * Math.PI * 2;
 
-      // Pre-calculate initial coordinate and apply transform BEFORE appending to DOM
       const initialDrift = Math.sin(phase) * driftAmp;
-      const initialX = (startX / 100) * windowW + initialDrift;
+      const initialX = (startX / 100) * this.viewportW + initialDrift;
       el.style.transform = `translate3d(${initialX}px, ${initialY}px, 0) scale(${scale}) rotate(${rotation}deg)`;
-      el.style.opacity = "0"; // Start invisible and let update loop smoothly fade in
+      el.style.opacity = "0";
 
       this.container.appendChild(el);
 
@@ -257,29 +260,25 @@
     }
 
     update(delta, now) {
-      const windowH = window.innerHeight;
-      const windowW = window.innerWidth;
+      const windowH = this.viewportH;
+      const windowW = this.viewportW;
 
       for (let i = 0; i < this.garnishes.length; i++) {
         const g = this.garnishes[i];
 
-        // Rise upwards
         g.y -= g.speed * delta;
-        // Calm rotation
         g.rotation += g.rotSpeed * delta;
-        // Horizontal drift
+
         const currentDrift = Math.sin(now * g.driftFreq + g.phase) * g.driftAmp;
         const currentX = (g.xPercent / 100) * windowW + currentDrift;
 
-        // Reset seamlessly when completely departed above viewport
         if (g.y < -75) {
           g.y = windowH + 40 + Math.random() * 50;
-          g.xPercent = 6 + Math.random() * 88;
+          g.xPercent = 10 + Math.random() * 80;
           g.rotation = Math.random() * 360;
           g.phase = Math.random() * Math.PI * 2;
         }
 
-        // Smooth entry & exit edge-fade (no popping or flickering)
         let edgeFade = 1;
         if (g.y > windowH - 40) {
           edgeFade = Math.max(0, (windowH + 60 - g.y) / 100);
@@ -448,7 +447,38 @@
   }
 
   /* --------------------------------------------------------------------------
-     6. Contextual Greeting & Announcements
+     6. Dynamic Mobile Viewport & Symmetric Grid Scaling
+     -------------------------------------------------------------------------- */
+  function applyDynamicMobileLayout() {
+    const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // Available width accounting for side safe zones
+    const availableWidth = Math.min(viewportWidth - 24, 440);
+    // Calculated cell size ensuring strict 3-column symmetry
+    const gap = viewportWidth < 360 ? 8 : (viewportWidth < 400 ? 10 : 12);
+    const calculatedTileSize = Math.floor((availableWidth - (gap * 2)) / 3);
+
+    const root = document.documentElement;
+    root.style.setProperty("--app-width", `${availableWidth}px`);
+    root.style.setProperty("--app-height", `${viewportHeight}px`);
+    root.style.setProperty("--dyn-tile-size", `${calculatedTileSize}px`);
+    root.style.setProperty("--dyn-grid-gap", `${gap}px`);
+
+    // Compact scale mode for short mobile screens
+    if (viewportHeight < 680) {
+      document.body.classList.add("compact-screen");
+    } else {
+      document.body.classList.remove("compact-screen");
+    }
+
+    if (flightSystemInstance) {
+      flightSystemInstance.onResize();
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     7. Contextual Greeting & Announcements
      -------------------------------------------------------------------------- */
   function updateTimeOfDayGreeting() {
     const subtitle = document.getElementById("hub-subtitle");
@@ -495,7 +525,7 @@
   }
 
   /* --------------------------------------------------------------------------
-     7. Grid Renderer with Smoked Glass Badges & Responsive Tactile States
+     8. Grid Renderer with Auto-Fitting Titles & Smoked Glass Badges
      -------------------------------------------------------------------------- */
   function renderGrid() {
     const grid = document.getElementById("game-grid");
@@ -509,6 +539,8 @@
       const item = validateGameItem(rawItem, index);
       const li = document.createElement("li");
       li.className = "grid-cell";
+      // Enforce zero min-width to avoid flex / grid blowout on mobile
+      li.style.minWidth = "0";
 
       if (item.enabled) {
         const link = document.createElement("a");
@@ -516,6 +548,7 @@
         link.href = item.url;
         link.setAttribute("aria-label", `Play ${item.name}: ${item.desc}`);
         link.setAttribute("data-id", item.id);
+        link.style.minWidth = "0";
 
         if (completedList.includes(item.id)) {
           const badge = document.createElement("span");
@@ -566,6 +599,7 @@
         disabledTile.className = "tile tile-disabled";
         disabledTile.setAttribute("aria-disabled", "true");
         disabledTile.setAttribute("aria-label", `${item.name} is coming soon`);
+        disabledTile.style.minWidth = "0";
 
         const iconEl = document.createElement("div");
         iconEl.className = "tile-icon";
@@ -599,7 +633,7 @@
   });
 
   /* --------------------------------------------------------------------------
-     8. Modal Dialog Controller with Focus Trap & Swipe-to-Dismiss
+     9. Modal Dialog Controller with Focus Trap & Swipe-to-Dismiss
      -------------------------------------------------------------------------- */
   let activeModal = null;
   let previouslyFocused = null;
@@ -749,7 +783,7 @@
   }
 
   /* --------------------------------------------------------------------------
-     9. Interactions, Settings & Multi-Tab Synchronization
+     10. Interactions, Settings & Multi-Tab Synchronization
      -------------------------------------------------------------------------- */
   function applyAnimationState() {
     if (state.animations) {
@@ -829,6 +863,17 @@
       });
     }
 
+    // Dynamic viewport recalculation on resize and mobile orientation change
+    let resizeTimer = null;
+    window.addEventListener("resize", () => {
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(applyDynamicMobileLayout, 60);
+    });
+
+    window.addEventListener("orientationchange", () => {
+      setTimeout(applyDynamicMobileLayout, 100);
+    });
+
     window.addEventListener("storage", (e) => {
       if (e.key === SETTINGS_KEY) {
         loadSettings();
@@ -842,10 +887,11 @@
   }
 
   /* --------------------------------------------------------------------------
-     10. Initialization
+     11. Initialization
      -------------------------------------------------------------------------- */
   function init() {
     loadSettings();
+    applyDynamicMobileLayout();
     updateTimeOfDayGreeting();
 
     const stageEl = document.getElementById("garnish-stage");
