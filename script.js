@@ -13,8 +13,8 @@
     { id: "connections",  name: "Connections", desc: "Find groups of 4",     url: "https://tileworksgamesstudio.github.io/86Connections/", enabled: true,  icon: "nodes" },
     { id: "trivia",       name: "Trivia",      desc: "Knowledge test",       url: "https://tileworksgamesstudio.github.io/86Trivia/",      enabled: true,  icon: "help" },
     { id: "hangman",      name: "Hangman",     desc: "Guess the phrase",     url: "https://tileworksgamesstudio.github.io/86Hangman/",     enabled: true,  icon: "text" },
-    { id: "specs",        name: "Match",       desc: "Pair identical cards", url: "https://tileworksgamesstudio.github.io/86Specs/",       enabled: true,  icon: "check" },
-    { id: "memory",       name: "Memory",      desc: "Pattern recall",       url: "https://tileworksgamesstudio.github.io/86Memory/",      enabled: true,  icon: "cards" },
+    { id: "specs",        name: "SPECS TRAINING",       desc: "Cocktail training", url: "https://tileworksgamesstudio.github.io/86Specs/",       enabled: true,  icon: "check" },
+    { id: "memory",       name: "Memory",      desc: "Pair identical cards",       url: "https://tileworksgamesstudio.github.io/86Memory/",      enabled: true,  icon: "cards" },
     { id: "spelling-bee", name: "Letters",     desc: "Form 4+ letter words", url: "https://tileworksgamesstudio.github.io/86SpellingBee/", enabled: true,  icon: "hex" },
     { id: "wordle",       name: "Word Guess",  desc: "5-letter challenge",   url: "https://tileworksgamesstudio.github.io/86Wordle/",      enabled: true,  icon: "rows" },
     { id: "wordsearch",   name: "Wordsearch",  desc: "Find hidden words",    url: "https://tileworksgamesstudio.github.io/86Wordsearch/",  enabled: true,  icon: "dice" }
